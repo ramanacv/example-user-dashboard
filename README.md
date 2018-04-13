@@ -463,57 +463,6 @@ export default compose(
 )(BlockchainBlockCard);
 ```
 
-
-# Application Infrastructure
-
-The Application has several import high-level folders
-
-- build <----- Deployable Assets
-- configuration <----- Build Management
-- contracts <----- Ethereum Smart Contracts
-- documentation 
-- migrations <----- Deploy Configuration Smart Contracts
-- public <----- Static Entry
-- scripts <----- Build Logic
-- src <---- Primary Javascript
-
-The `src` folder contains the root entry files for the application, extensions and page plugins.
-
-The `build` folder contains the bundled/optimized entry files for the application, extension and embedable dapps.
-
-The `contracts` folder contains application specific smart contracts.
-
-The `assembly` folder contains application specific C++/Go/Rust for WebAssembly target ouput.
-
-The `embed` folder contains modular components/mini-applications with 1 line Javascript embeds
-
-## Application
-The primary build process is the Browser Application. 
-
-## Embed (Page Plugin)
-
-The Embed (page plugin) builds creates a mini-application, capable of being embedded on any website with 1 line of Javascript. The Page Plugin loads a "React mini-application" directly into the embeded location. So for example, if the Javascript was inserted in a Site's sidebar, the application would replace the script file in the DOM tree with the "mini-application", upon page load.
-
-In the future this system might be optimized to load a single React library, but allow multiple Blockchain Interface components to be embbeded withni a site. This will serve both as a prototypging tool and potentially to help non-technical people deploy complex Blockchain technology solutions simply.
-
-The Page Plugin build is currently in Alpha, because there is no real-world experimentation deployed yet, besides a simple Monero Browser Mining tool at http://harvest.surge.sh/#/ running as a simple test.
-
-
-## Blockchain (Ethereum)
-The Blockchain sector contains the essentials for prototypgina a modern Distributed Application. The Blockchain sector is under active prototyping. In other words, the infrastructure and module combinations are still being evaluated and tested.
-
-1. Ethers (https://ethers.io)
-2. uPort (https://www.uport.me)
-3. Truffle (http://truffleframework.com)
-
-## Interface (React)
-The Interface sector is a full selection of React components/containers/entities, built with relatively strict adherence to the Atomic Design strategy.
-- Redux (State Management)
-- Sagas (Async Data Flow)
-- Styled Components (Atomic Design)
-
-
-
 #### Redux Store
 Redux Store Departments, at a minimum, will include ```getDeltaData``` and ```getDeltaStatus``` selectors. In other words, check the status of the request and get the returned data payload.
 
@@ -528,9 +477,6 @@ The Firebase sector provides the scalable infrastructure for application develop
 -  Firebase (NoSQL)
 -  Authentication (OAuth + Phone Verification)
 -  Realtime Database (Data Structure)
-
-## Performant Computation (WebAssebmly)
-The WebAssembly sector will provides the mechanisms for including low-level byte-code computations. In the future, it's predicted Distributed Applications will include more and more cryptography, including other computation intensive calculations, so it's important to start laying the foundation for robust WebAssembly integration.
 
 ## The Component Architecture
 Multiple design and developments philosphies/ideas are experimented and implemented within the Application, to achieve the mission  rapid, scalable user experience/interface prototyping for distrubted autonomous organizations functionality. The boilerplate is meant to be adaptaive, so overtime solutions will be added/pruned accomodate more cross-application composability.
@@ -607,91 +553,4 @@ export default compose(
   queryLifecycle,
 )(BlockchainBlockCard);
 
-```
-
-
-### Components
-#### Interface Building Blocks
-Components are the core building block of tht Frontend Interface. Incorporating the Atomic philosophy, components are categorized by significance, size and relevance within the Component hierarchy. Simply put, the similar to "the universe", which is built up of quarks, particles, atoms, molecules and organisms, so too is our Application. The components follow a simple hierarchy: quarks(css properties), atoms (links, input, svg, paragraphs), molecules (fields, slider, video) and organisms (tables, calendar, dialog), which for the most part allow for easier composition across a diverse range of interface/experience requirements.
-
-
-### Entity Component Example
-```
-/* ------------------------- External Dependencies -------------------------- */
-import React from 'react'
-import idx from './idx';
-
-/* ------------------------- Internal Dependencies -------------------------- */
-import { Absolute} from 'particles'
-import { 
-  Flex, Box, 
-  BackgroundImage, BackgroundGradient,
-  Button, Container, Heading, Image, Link, Paragraph, Section, Span, SVG,
-  Blockquote, HorizontalRule, Shape, Responsive 
-}from 'atomic'
-
-/* ------------------------------- Component -------------------------------- */
-const mainLayout = {
-  flex:['2 1 0'],
-  bg:'white',
-  bs:'0',
-  br: 5,
-  of:'hidden'
-}
-
-export default (props) => {
-  /*--- Extraction ---*/
-  const{ data } = props
-  /*--- Extraction ---*/
-  const id = idx(props, _ => _.id)
-  const nameDisplay = idx(props, _ => _.name.nameDisplay)
-  const nameAlias = idx(props, _ => _.name.nameAlias)
-  const phone = idx(props, _ => _.contact.contactPhone)
-  const email = idx(props, _ => _.contact.contactEmail)
-  const website = idx(props, _ => _.metadata.metadataWebsite)
-  const imageBanner = idx(props, _ => _.images.imageBanner)
-
-  const street = idx(props, _ => _.address.addressStreet)
-  const city = idx(props, _ => _.address.addressCity)
-  const zip = idx(props, _ => _.address.addressZip)
-
-  if (!props.id) return null
-  /*--- Component ---*/
-  return <Flex direction={['row']} align='stretch' justify='center' p={[10]} {...props} key={id} >
-      <Box {...mainLayout}>
-        {!imageBanner ? null : 
-         <Link to={`/dashboard/${props.entity}/${id}`} color='blue'>
-          <Box h={[100,160]} of='hidden' position='relative'>
-            <BackgroundImage src={imageBanner}/>
-          </Box>
-        </Link>
-        }
-        <Box p={[10]} >
-          <Link to={`/dashboard/${props.entity}/${id}`} color='blue' >
-            <Heading 
-              f={[3,4]}
-              level={3}
-              color='purple'
-              children={nameDisplay} 
-            />
-          </Link>
-          { !nameAlias?null:
-          <Heading f={[2]} level={3} color='blue'>
-            Alias: {nameAlias}
-          </Heading>}
-          { !website?null:
-          <Heading f={[2]} level={3} color='blue' fw={[300]}><strong>Website: </strong>{website}</Heading>}
-          { !email?null:
-          <Heading f={[2]} level={3} fw={[300]}><strong>Email:</strong>{email}</Heading>}
-          { !street ?null
-          :<HorizontalRule bc='blue' o={0.3}/>
-          }
-          
-          { !street ?null
-          :<Heading f={[2]} level={3} fw={[300]}>Addresss: {street + ", " + city + " " + zip } </Heading>
-          }
-        </Box>
-      </Box>
-    </Flex>
-}
 ```
