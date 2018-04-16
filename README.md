@@ -9,6 +9,14 @@ The BuidlBox boilerplate also provides core building blocks like Redux, Routing,
 
 TL;DR: Rapid protoping of decentralized applications using mesh solutions.
 
+## How To Get Involved
+It's encouraged to format the BuidlBox issues adhering to our submission guidelines. A primary objective of the BuidlBox is to encourage collaboration and input from the uPort/Ethereum growing community. We want this to be your project. If you see an opportunity. Great! Create a public issue, uPort will fund the bounty and together we'll Open Source The World.
+
+- User Story
+- Background
+- Acceptance Criteria
+- Technical Details
+
 ![BuidlBox Preview](documentation/assets/images/buidl-preview.png)
 ### Install
 

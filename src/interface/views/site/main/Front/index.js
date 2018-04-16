@@ -10,6 +10,7 @@ import {
 import Resources from 'components/sections/FrontResources'
 import EnsScan from 'features/EnsScan'
 import MeetupEvent from 'features/MeetupEvent'
+import PunchTheClock from 'features/PunchTheClock'
 import DialogOpen from 'containers/dialog/DialogOpen'
 /* ------------------------------- Component -------------------------------- */
 export default props =>
@@ -95,9 +96,13 @@ export default props =>
 
     <Container w={[620]} ta='center' py={150} >
       <Box p={40} gradient="purple" color="white" boxShadow={3} >
-        <MeetupEvent
+        {/* <MeetupEvent
           contractAddress="0x311a70681f008d51f01e75032ee766718c9d74ba"
           contractName="MeetupEvent"
+        /> */}
+        <PunchTheClock
+          contractAddress="0x4a7103b350ea25cca5903bdd99ab7907c3f05a64"
+          contractName="PunchTheClock"
         />
       </Box>
     </Container>

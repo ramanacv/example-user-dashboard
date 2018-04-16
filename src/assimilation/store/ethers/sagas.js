@@ -491,6 +491,7 @@ export function * contractCreate ({payload, metadata}) {
     } else {
       contract = new ethers.Contract(ethAddress, ethAbi, provider);
     }
+    console.log(contract)
     window.ethereum.contracts[contractName] = contract
     yield put(actions.contractCreate("SUCCESS")(
       contract,

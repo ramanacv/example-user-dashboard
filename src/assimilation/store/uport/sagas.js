@@ -133,7 +133,6 @@ function* initContract({payload, metadata}) {
 function* sendTransaction({payload, metadata}) {
   try {
     const { contractABI, contractAddress, contractFunction, contractParams } = payload
-
     const contractInstance = uPortConnection.contract(contractABI)
     const contract = contractInstance.at(contractAddress)
     const response = contractParams 

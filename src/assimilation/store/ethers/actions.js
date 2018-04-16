@@ -32,6 +32,7 @@ CONTRACT_CREATE: createRequestTypes('CONTRACT_CREATE'),
 CONTRACT_CALL: createRequestTypes('CONTRACT_CALL'),
 CONTRACT_ESTIMATE_GAS: createRequestTypes('CONTRACT_ESTIMATE_GAS'),
 CONTRACT_SEND_TRANSACTION: createRequestTypes('CONTRACT_SEND_TRANSACTION'),
+CONTRACT_DEPLOY: createRequestTypes('CONTRACT_DEPLOY'),
 
 TRANSACTION_BATCH_PROCESS: createRequestTypes('TRANSACTION_BATCH_PROCESS'),
 
@@ -63,6 +64,7 @@ accountBalance: status => (payload, metadata) => action(actions.ACCOUNT_BALANCE[
 accountTransactionCount: status => (payload, metadata) => action(actions.ACCOUNT_TRANSACTIONCOUNT[status], payload, metadata, status, entity),
 
 contractCreate: status => (payload, metadata) => action(actions.CONTRACT_CREATE[status], payload, metadata, status, entity),
+contractDeploy: status => (payload, metadata) => action(actions.CONTRACT_CREATE[status], payload, metadata, status, entity),
 contractCall: status => (payload, metadata) => action(actions.CONTRACT_CALL[status], payload, metadata, status, entity),
 contractEstimateGas: status => (payload, metadata) => action(actions.CONTRACT_ESTIMATE_GAS[status], payload, metadata, status, entity),
 contractSendTransaction: status => (payload, metadata) => action(actions.CONTRACT_SEND_TRANSACTION[status], payload, metadata, status, entity),
