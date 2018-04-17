@@ -100,43 +100,41 @@ const databaseReadSingle = ({entity, branch = [], boundaries = {}, order = {} })
 //  *  @var writeType - [push, update, set]
 //  */
 function databaseWrite({ entity, branch = [], payload = {}, config = {}, boundaries = {}, order = {} }) {
-  // // Validate Query
-  return {message:"success"}
+  // Validate Query
+  let pathReference = admin.database().ref(`${_.join(branch, '/')}`);
+  switch(config.writeType) {
+    case'push': // Push | Create a new database entry.
+      try {
+        const objectReference = pathReference.push({...payload})
+        const objectDatabaseReference = admin.database().ref(`${_.join(branch, '/') + "/" + objectReference }`);
+        objectDatabaseReference.update({pointer: objectReference})
+        return objectReference // Return object's unique identifier (ex: KqOZV5OSevQaZz3KcxK)
+      } catch(err) {
+        return {message: err.message}
+      }
+    break;
+    case'update': // Update | Update an existing database entry.
+      try {
+        const objectReference = pathReference.update({...payload})
+        return objectReference
+      } catch(err) {
+        console.log(err)
+        return {message: err.message}
+      }
+    break;
+    case'set': // Set 
+      try {
+        const objectReference = pathReference.set({...payload})
+        // Return Promise containing void 
+        return objectReference
+        } catch(err) {
+          return {message: err.message}
+        }
+      break;
+    default:
+      return {message: 'error: databaseWrite failed because writeType default is null. Please select push, update or set.'}
 
-  // let pathReference = admin.database().ref(`${_.join(branch, '/')}`);
-  // switch(config.writeType) {
-  //   case'push': // Push | Create a new database entry.
-  //     try {
-  //       const objectReference = pathReference.push({...payload})
-  //       const objectDatabaseReference = admin.database().ref(`${_.join(branch, '/') + "/" + objectReference }`);
-  //       objectDatabaseReference.update({pointer: objectReference})
-  //       return objectReference // Return object's unique identifier (ex: KqOZV5OSevQaZz3KcxK)
-  //     } catch(err) {
-  //       return {message: err.message}
-  //     }
-  //   break;
-  //   case'update': // Update | Update an existing database entry.
-  //     try {
-  //       const objectReference = pathReference.update({...payload})
-  //       return objectReference
-  //     } catch(err) {
-  //       console.log(err)
-  //       return {message: err.message}
-  //     }
-  //   break;
-  //   case'set': // Set 
-  //     try {
-  //       const objectReference = pathReference.set({...payload})
-  //       // Return Promise containing void 
-  //       return objectReference
-  //       } catch(err) {
-  //         return {message: err.message}
-  //       }
-  //     break;
-  //   default:
-  //     return {message: 'error: databaseWrite failed because writeType default is null. Please select push, update or set.'}
-
-  // }
+  }
 
 }
 

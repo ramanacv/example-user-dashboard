@@ -71,69 +71,69 @@ exports.identity = functions.https.onRequest((request,response)=> {
                     Database Requests 
 
 /*---*---------------              ---------------*---*/
-// exports.attestationRequest = functions.database.ref('/request/attestation/{request}')
-//   .onCreate(event => {
-//     const eventKey = event.data.key 
-//     const eventData = event.data.val()
-//     if(eventData.meta.status) {
-//       switch(eventData.meta.status) {
+exports.attestationRequest = functions.database.ref('/request/attestation/{request}')
+  .onCreate(event => {
+    const eventKey = event.data.key 
+    const eventData = event.data.val()
+    if(eventData.meta.status) {
+      switch(eventData.meta.status) {
 
-//         /**
-//          * Manage Attestation Requests
-//          * 
-//          * TODO(@kamescg): Better Attestation Verification database naming structure.
-//          * 
-//          * Currently the '/request/attestation/' path is montired for database changes.
-//          * This is just a starting point and MVP for data streaming between frontend/backend
-//          *  
-//          * The process needs to be more thoroughly thought about to fully understand how we
-//          * can enable as many verifiatons systems to "hook" into our private verification attestation
-//          * framework/boilerplate. 
-//          */
+        /**
+         * Manage Attestation Requests
+         * 
+         * TODO(@kamescg): Better Attestation Verification database naming structure.
+         * 
+         * Currently the '/request/attestation/' path is montired for database changes.
+         * This is just a starting point and MVP for data streaming between frontend/backend
+         *  
+         * The process needs to be more thoroughly thought about to fully understand how we
+         * can enable as many verifiatons systems to "hook" into our private verification attestation
+         * framework/boilerplate. 
+         */
 
-//         case('initialized'):
-//               db.databaseSearch({
-//                 branch: ["users"],
-//                 boundaries: {
-//                   equalTo: eventData.meta.uid
-//                 },
-//                 order: {
-//                   orderByChild: "questKey" // QuestKey is a param specific to a @kamescg project. This needs to be changed for all projects.
-//                 }
-//               }).then(lookup=>{
-//                 var credentials = new Credentials({
-//                   appName: 'Eidenai',
-//                   address: '2oo7fQjxR44MnKa8n4XKDZBBa2Buty4qrug',
-//                   signer: uportSimpleSigner,
-//                   networks: {'0x4': {'registry' : '0x2cc31912b2b0f3075a87b3640923d45a26cef3ee', 'rpcUrl' : 'https://rinkeby.infura.io'}}
-//                 }).attest({
-//                   sub: lookup[0].address,
-//                   claim: {
-//                     ...eventData.data
-//                   }
-//                 }).then(attestation=>{
-//                     db.databaseWrite({
-//                       config: {writeType: 'update'},
-//                       entity: 'users',
-//                       branch: ["request", 'attestation', eventKey],
-//                       payload: {
-//                         ...eventData,
-//                         admin: {
-//                           attestation: `me.uport:add?attestations=${attestation}`, // TODO(@kamescg) Update this JWT generation using Zach's new libraries.
-//                           issued: true
-//                         }
-//                       },
-//                     })
+        case('initialized'):
+              db.databaseSearch({
+                branch: ["users"],
+                boundaries: {
+                  equalTo: eventData.meta.uid
+                },
+                order: {
+                  orderByChild: "questKey" // QuestKey is a param specific to a @kamescg project. This needs to be changed for all projects.
+                }
+              }).then(lookup=>{
+                var credentials = new Credentials({
+                  appName: 'Eidenai',
+                  address: '2oo7fQjxR44MnKa8n4XKDZBBa2Buty4qrug',
+                  signer: uportSimpleSigner,
+                  networks: {'0x4': {'registry' : '0x2cc31912b2b0f3075a87b3640923d45a26cef3ee', 'rpcUrl' : 'https://rinkeby.infura.io'}}
+                }).attest({
+                  sub: lookup[0].address,
+                  claim: {
+                    ...eventData.data
+                  }
+                }).then(attestation=>{
+                    db.databaseWrite({
+                      config: {writeType: 'update'},
+                      entity: 'users',
+                      branch: ["request", 'attestation', eventKey],
+                      payload: {
+                        ...eventData,
+                        admin: {
+                          attestation: `me.uport:add?attestations=${attestation}`, // TODO(@kamescg) Update this JWT generation using Zach's new libraries.
+                          issued: true
+                        }
+                      },
+                    })
 
-//                 }).catch(err=>console.log(err))
-//             })
-//           break;
-//           default:
-//           // TODO(@kamescg): Handle default use case. 
-//           break;
-//       }
-//     }
-//   })
+                }).catch(err=>console.log(err))
+            })
+          break;
+          default:
+          // TODO(@kamescg): Handle default use case. 
+          break;
+      }
+    }
+  })
 
 /*---*---------------              ---------------*---* 
 
