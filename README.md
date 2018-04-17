@@ -24,7 +24,7 @@ It's encouraged to format the BuidlBox issues adhering to our submission guideli
 $ npm install -g truffle
 
 -------- Step 1 --------
-git clone git@github.com:uport-project/budilbox.git budilbox ; cd budilbox
+git clone git@github.com:uport-project/buidlbox.git ; cd buidlbox
 
 -------- Step 2 --------
 npm install || yarn
