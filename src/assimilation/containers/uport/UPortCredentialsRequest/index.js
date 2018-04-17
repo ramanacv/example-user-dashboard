@@ -16,7 +16,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch, props) => ({
   uPortGetCredentialsRequest: ()=>dispatch(uPortGetCredentialsRequest({
     payload: {
-      requested: ['questKey', 'name', 'email', 'phone', 'country', 'avatar'],
+      requested: [props.requested],
       notifications: true
     },
     metadata: {

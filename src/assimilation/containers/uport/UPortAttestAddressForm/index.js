@@ -17,11 +17,9 @@ import Form from './form'
 /* --------------------------- Component Entry ------------------------------ */
 /*-- Event Handlers ---*/
 const onSubmit = (data, dispatch, props) => new Promise((resolve, reject) => {
-  console.log(props.data)
-  console.log(data)
   dispatch(uPortGetAttestCredentialsRequest({
     payload: {
-      sub: 'Ox' + props.data.address,
+      sub: + props.data.address,
       claim: {...data}
     },
     metadata: {

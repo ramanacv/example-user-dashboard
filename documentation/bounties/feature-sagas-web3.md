@@ -1,5 +1,5 @@
 ## User Story
-As a developer I don't want to be forced to pick a library I'm not familiar with or have experience using. The BuidlBox currently uses the `ethers.js` library to interact with the Ethereum Blockchain, but the more popular alternative is Web3.js library.
+As a developer I don't want to be forced to pick a library I'm not familiar with or have experience using. The BuidlBox currently uses the `ethers.js` library to interact with the Ethereum Blockchain, but the more popular alternative is `Web3.j`s library.
 
 As a developer I want a swappable state management architecture, so I don't run the risk of picking the wrong library i.e. it becomes deprecated (for any number of reasons) and days/weeks of technical debt are added to my project. Instead I want a swappable Application State Management that provides compability with multiple Javascript libraries responsible for communicating with the Ethereum blockchain. Let the Open Market pick the best solution.
 
@@ -25,10 +25,10 @@ Please reference the `ethers` store department located in `/src/assimilation/sto
 - selectors.js
 - sagas.js
 
-#### Poor Mans Redux Store Department
+### Auto Generate Redux Store Departments - Code Writing Code
 Writing boilerplate code for state management is a pain. It's a major drawback of Redux. However, BuidlBox values standardizing data management/streaming patterns for complex Ethereum Blockchain interactions, so Redux is a great candidate for predictable state management across as many decentralize applications as possible.
 
-To make it easy a "poor mans redux store generator can be found in the `resources` folder. Simply map Redux Store Actions/Reducers/Sagas to a Javascript library using the auto-generator using our simple code generator. If you want to save hours of writing boilerplate please use the code generator. Plus you don't have to learn Redux, you can just make the correct API mappings and a Redux/Sagas Developer can handle the rest.
+To make it easy a "code generator" template for redux store departments can be found in the `resources` folder. Simply map Redux Store Actions/Reducers/Sagas to a Javascript library using the auto-generator using our simple code generator. If you want to save hours of writing boilerplate please use the code generator. Plus you don't have to learn Redux, you can just make the correct API mappings and a Redux/Sagas Developer can handle the rest.
 
 Open the `resources/redux-derpartment/ethers/` in the Terminal and type the command `node actions.js`
 
