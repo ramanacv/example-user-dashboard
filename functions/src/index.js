@@ -1,17 +1,21 @@
 /* ------------------------ Node.js Dependencies ------------------------ */
-import URL from 'url-parse'
+const URL = require('url-parse');
 
 /* ------------------------ External Dependencies ------------------------ */
 const functions = require('firebase-functions') // We can use `import` sytax. Why? idn... @kamescg
 const admin = require('firebase-admin') // We can use `import` sytax. Why? idn... @kamescg
+const ethers = require('ethers');
 
-import uuid from 'uuid/v1';
-import express from 'express'
-import { Credentials, SimpleSigner } from 'uport'
-import serviceAccount from '../secrets/service_account.json'
+const uuid = require('uuid/v1');
+const express =  require('express');
+const uport = require('uport');
+const Credentials = uport.Credentials;
+const SimpleSigner = uport.SimpleSigner;
+// // import { Credentials, SimpleSigner } from 'uport'
+const serviceAccount = require('../secrets/service_account.json')
 /* ------------------------- Internal Dependencies -------------------------- */
-import cors from 'cors'
-import db from './database';
+const cors = require('cors');
+const db = require('./database');
 
 // Constants
 cors({origin: true});
@@ -165,3 +169,43 @@ exports.authenticationComplete = functions.auth.user().onCreate(event => {
   firestore.collection('people').add(person)
 
 });
+
+/*---*---------------              ---------------*---* 
+
+                     Ethereum Signing 
+
+/*---*---------------              ---------------*---*/
+/* TODO (@siunami): Currently everything is hardcoded
+
+infuraProviderKey: need to supply infura provider key
+privateKeyOfSender: privateKey of signer
+sendTokenTo: address to send token to
+sentToken: hardcoded to send 1 token to same address. FUTURE: Will accept as request parameters
+myContractABI, myContractAddress: for each contract
+
+*/
+exports.transferToken = functions.https.onRequest((req,res) => {
+  // Provided by user
+  var infuraProviderKey = '';
+  var privateKeyOfSender = '';
+  var sendTokenTo = '';
+  var numTokensToSend = 1;
+
+  var myContractABI = [];
+  var myContractAddress = "";
+
+  var provider = new ethers.providers.InfuraProvider('rinkeby',infuraProviderKey);
+  var wallet = new ethers.Wallet(privateKeyOfSender, provider);
+  var contract = new ethers.Contract(myContractAddress, myContractABI, wallet);
+
+  var sentToken = contract.transfer(sendTokenTo, numTokensToSend*100);
+  return sentToken.then(function(){
+    console.log("SUCCESS");
+    return res.redirect(303, "/");
+  }).catch(function(err){
+    console.log("FAILURE");
+    console.log(err);
+    return res.redirect(404, err);
+  })
+})
+

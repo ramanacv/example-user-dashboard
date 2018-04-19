@@ -1,5 +1,5 @@
 /* ------------------------ External Dependencies ------------------------ */
-import _ from 'lodash'
+const _ =  require('lodash');
 const admin = require('firebase-admin');
 /* ------------------------------- Database --------------------------------- */
 const databaseSearch = ({branch = [], boundaries = {}, order = {} }) => new Promise((resolve, reject) => {
@@ -89,19 +89,18 @@ const databaseReadSingle = ({entity, branch = [], boundaries = {}, order = {} })
 
 });
 
-/**
- * databaseWrite 
- * @const {String} entity 
- * @const {Array/Object} array 
- * @const {Object} payload 
- * @const {Object} metdata
- * 
- * @desc metadata.config
- *  @var writeType - [push, update, set]
- */
+// /**
+//  * databaseWrite 
+//  * @const {String} entity 
+//  * @const {Array/Object} array 
+//  * @const {Object} payload 
+//  * @const {Object} metdata
+//  * 
+//  * @desc metadata.config
+//  *  @var writeType - [push, update, set]
+//  */
 function databaseWrite({ entity, branch = [], payload = {}, config = {}, boundaries = {}, order = {} }) {
   // Validate Query
-
   let pathReference = admin.database().ref(`${_.join(branch, '/')}`);
   switch(config.writeType) {
     case'push': // Push | Create a new database entry.
