@@ -6,5 +6,3 @@ The uPort BuidlBox is an experiment to equip developers quickly build decentrali
 Sections
  - [Communicate With The Blockchain](communicate-blockchain.md)
  - [Redux Store Departments](redux-store-departments.md)
-
- Documentation is being actively written.

@@ -14,6 +14,8 @@
     "migrate:rinkeby": "truffle migrate --network rinkeby",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "build:wasm": "node scripts/wasm.js",
+    "build:asm": "node scripts/asm.js",
     "deploy": "gh-pages -d build/application",
     "test": "node scripts/test.js --env=jsdom"
   },
@@ -64,6 +66,7 @@
     "url-loader": "0.5.9",
     "uuid": "^3.2.1",
     "validator": "^8.0.0",
+    "webassembly": "^0.11.0",
     "whatwg-fetch": "2.0.3",
     "write-file-webpack-plugin": "^4.2.0"
   },
