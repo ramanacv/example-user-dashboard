@@ -1,7 +1,7 @@
 /* ------------------------- ENTITY -------------------------- */
 const entityTypes = require('./shared').entityTypes
 const actions = require('./shared').actions
-const capitalizeFirstLetter = require('./shared').capitalizeFirstLetter
+const changeCase = require('change-case')
 
 const entity = 'web3'
 const entityUppercase = 'WEB3'
@@ -24,18 +24,10 @@ export default (state = initialState, {type, payload, metadata}) => {
 entityTypes.map(type=>{
   const actionsRendered = actions[type].map(entityActions=> {
 
-    let functionHeader = entityActions[0].toUpperCase()
-    const split = entityActions.slice(1).split("_")
-    if (split[1]) {
-      const split = entityActions.slice(1).split("_")
-      functionHeader = functionHeader + split[0] +  capitalizeFirstLetter(split[1])
-    } else {
-      functionHeader = functionHeader + entityActions.slice(1)
-    }
-
+    const functionName = changeCase.camelCase(type + '_' + entityActions)
 
     const reduce = `
-      case actions.${type.toUpperCase()}_${entityActions.toUpperCase()}.REQUEST:
+      case actions.${functionName}.REQUEST:
         return {
           ...state,
           [metadata.delta]: {
@@ -43,7 +35,7 @@ entityTypes.map(type=>{
             status: undefined
           }
         }
-      case actions.${type.toUpperCase()}_${entityActions.toUpperCase()}.SUCCESS:
+      case actions.${functionName}.SUCCESS:
         return {
           ...state,
           [metadata.delta]: {
@@ -52,7 +44,7 @@ entityTypes.map(type=>{
             data: payload
           }
         }
-      case actions.${type.toUpperCase()}_${entityActions.toUpperCase()}.FAILURE:
+      case actions.${functionName}.FAILURE:
         return {
           ...state,
           [metadata.delta]: {

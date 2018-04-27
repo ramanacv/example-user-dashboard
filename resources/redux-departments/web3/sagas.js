@@ -2,31 +2,25 @@
 const entityTypes = require('./shared').entityTypes
 const actions = require('./shared').actions
 const capitalizeFirstLetter = require('./shared').capitalizeFirstLetter
+const changeCase = require('change-case')
 
 const entity = 'ethers'
 const entityUppercase = 'ETHERS'
 
 entityTypes.map(type=>{
   const actionsRendered = actions[type].map(entityActions=> {
-    let functionHeader = entityActions[0].toUpperCase()
-    const split = entityActions.slice(1).split("_")
-    if (split[1]) {
-      const split = entityActions.slice(1).split("_")
-      functionHeader = functionHeader + split[0] +  capitalizeFirstLetter(split[1])
-    } else {
-      functionHeader = functionHeader + entityActions.slice(1)
-    }
+    const functionName = changeCase.camelCase(type + '_' + entityActions)
     return (
 `
-export function * ${type}${functionHeader} ({payload, metadata}) {
+export function * ${functionName} ({payload, metadata}) {
   try {
 
-    yield put(actions.${type}${functionHeader}("SUCCESS")(
+    yield put(actions.${functionName}("SUCCESS")(
       payload,
       metadata,
     ))
   } catch (err) {
-    yield put(actions.${type}${functionHeader}("FAILURE")(
+    yield put(actions.${functionName}("FAILURE")(
       {
         error: err.message,
       },
@@ -46,23 +40,12 @@ export function * ${type}${functionHeader} ({payload, metadata}) {
 console.log(`export default function* ${entity}Saga() {
   yield [`)
 
-// reduxOperators.map(i=> {
-//   let name = i.split("_").map(t=>t.toLowerCase().charAt(0).toUpperCase() + t.toLowerCase().slice(1)).join("")
-//   let t = `   takeEvery(requests.${type.toUpperCase()}_${entityActions.toUpperCase()}.REQUEST, ${name.charAt(0).toLowerCase(0) + name.slice(1) }),`
-//   console.log(t)
-// })
-
 entityTypes.map(type=>{
   const actionsRendered = actions[type].map(entityActions=> {
-    let functionHeader = entityActions[0].toUpperCase()
-    const split = entityActions.slice(1).split("_")
-    if (split[1]) {
-      const split = entityActions.slice(1).split("_")
-      functionHeader = functionHeader + split[0] +  capitalizeFirstLetter(split[1])
-    } else {
-      functionHeader = functionHeader + entityActions.slice(1)
-    }
-    return ( `   takeEvery(actions.${type.toUpperCase()}_${entityActions.toUpperCase()}.REQUEST, ${type}${functionHeader }),\n`
+    const actionName = changeCase.constantCase(type + '_' + entityActions)
+    const functionName = changeCase.camelCase(type + '_' + entityActions)
+
+    return ( `   takeEvery(actions.${actionName}.REQUEST, ${functionName}),\n`
     )
 
   })

@@ -1,29 +1,55 @@
-
-const entityTypes = [
-  'subscribe',
-  'Contract',
-  'accounts',
-  'personal',
-  'Iban',
-  'abi'
-]
-
 const actions = {
-  subscribe: [
-    'subscribe',
-    'clearSubscriptions',
-    'subscribe',
-    'recoverTransaction'
+  web3: [
+    'set_provider'
   ],
-  Contract: [
-
+  eth: [
+    'set_provider',
+    'get_protocolVersion',
+    'is_syncing',
+    'get_coinbase',
+    'is_mining',
+    'get_hashrate',
+    'get_gas_price',
+    'get_accounts',
+    'get_block_number',
+    'get_balance',
+    'get_storage_at',
+    'get_code',
+    'get_block',
+    'get_block_transaction_count',
+    'get_uncle',
+    'get_transaction',
+    'get_transaction_from_block',
+    'get_transaction_receipt',
+    'get_transaction_count',
+    'send_transaction',
+    'send_signed_transaction',
+    'sign',
+    'sign_transaction',
+    'estimate_gas',
+    'get_past_logs',
+    'get_compilers',
+    'get_work',
+    'submit_work',
+    'subscribe',
+    'clear_subscriptions'
   ],
-  accounts: [
+  eth_contract: [
     'create',
-    'privateKeyToAccount',
-    'signTransaction',
-    'recoverTransaction',
-    'hashMessage',
+    'clone',
+    'deploy',
+    'call',
+    'send',
+    'estimate_gas',
+    'encode_abi',
+    'get_past_events'
+  ],
+  eth_accounts: [
+    'create',
+    'private_key_to_account',
+    'sign_transaction',
+    'recover_transaction',
+    'hash_message',
     'sign',
     'recover',
     'encrypt',
@@ -38,30 +64,46 @@ const actions = {
     'wallet_save',
     'wallet_load'
   ],
-  personal: [
-    'setProvider',
+  eth_personal: [
+    'set_provider',
     'providers',
-    'givenProvider',
-    'currentProvider',
-    'newAccount',
+    'given_provider',
+    'current_provider',
+    'new_account',
     'sign',
-    'ecRecover',
-    'signTransaction'
+    'ec_recover',
+    'sign_transaction'
   ],
-  Iban: [
-
+  eth_iban: [
+    'create',
+    'to_address',
+    'to_iban',
+    'from_ethereumAddress',
+    'from_iban',
+    'create_indirect',
+    'is_valid',
+    'is_direct',
   ],
-  abi: [
-
+  eth_abi: [
+    'encode_function_signature',
+    'encode_event_signature',
+    'encode_parameter',
+    'encode_function_call',
+    'decode_parameter',
+    'decode_parameters',
+    'decode_log'
+  ],
+  net: [
+    'get_id',
+    'is_listening',
+    'get_peer_count'
   ]
 }
 
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+const entityTypes = Object.keys(actions)
+
 
 module.exports = {
   entityTypes,
-  actions,
-  capitalizeFirstLetter
+  actions
 }
