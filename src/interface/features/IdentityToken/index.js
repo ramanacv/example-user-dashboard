@@ -17,7 +17,7 @@ import { fromUport } from 'assimilation/store/selectors'
 import { uPortSendTransactionRequest } from 'assimilation/store/actions'
 
 // Contract | MeetupEvent
-import {EIP20} from 'contracts'
+import {ERC20} from 'contracts'
 /* ---------------------------- Module Package ------------------------------ */
 
 /*-* State Management *-*/
@@ -67,7 +67,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   contractCreate: ()=>dispatch(ethers.contractCreate('REQUEST')(
     {
       ethAddress: props.contractAddress,
-      ethAbi: EIP20.abi,
+      ethAbi: ERC20.abi,
       contractName: props.contractName
     },
     {

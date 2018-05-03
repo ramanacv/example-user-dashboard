@@ -7,6 +7,7 @@ import {
 } from 'atomic'
 import DialogOpen from 'containers/dialog/DialogOpen'
 import UportCredentialsRequest from 'assimilation/containers/uport/UPortCredentialsRequest'
+import EnsResolve from 'assimilation/containers/ens/EnsResolve'
 /* ------------------------------- Component -------------------------------- */
 export default props => 
 <Section {...props} px={[20,40]}color='white' pos='relative' >
@@ -18,13 +19,17 @@ export default props =>
       </Heading>
       <Paragraph f={[1]}>
         Launch a decentralized application quickly and easily.<br/>
-        <strong>Win hackathons. Launch an MVP.</strong> Open Source The World.
       </Paragraph>
         <Container mt={25} w={[560]} >
           <Box my={20} >
-            <UportCredentialsRequest text="Login with uPort" styledButton={{ gradient: "purple"}} />
+            <UportCredentialsRequest
+              text="Login with uPort" 
+              display="cardAccount"
+              styledButton={{ gradient: "purple"}}
+              requested={['name', 'avatar', 'country', 'location', 'phone', 'email']}
+            />
           </Box>
-          <Flex justify="space-between" >
+          {/* <Flex justify="space-between" >
             <DialogOpen foundry='ViewHowItWorks'>
               <Button gradient='cherry' w={1} >
                 How It Works
@@ -40,7 +45,8 @@ export default props =>
                 Documentation
               </Button>
             </DialogOpen>
-          </Flex>
+          </Flex> */}
+          <EnsResolve/>
         </Container>
       </Box>
     </Flex>

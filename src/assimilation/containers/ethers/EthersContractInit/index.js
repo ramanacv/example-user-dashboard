@@ -38,7 +38,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     {
       delta: props.delta,
       network: {
-        provider: 'infura',
+        provider: 'default',
         chain: props.chain || 'rinkeby',
       }
     }

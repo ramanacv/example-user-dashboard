@@ -142,6 +142,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   )),
   contractCreate: (ensName)=>dispatch(ethers.contractCreate('REQUEST')(
     {
+      contractName: props.contractName,
       ethAddress: props.ethAddress,
       ethAbi: props.ethAbi
     },

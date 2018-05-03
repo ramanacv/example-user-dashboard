@@ -5,24 +5,11 @@ import SmartContractHeader from 'views/site/header/SmartContracts'
 import SmartContractMain from 'views/site/main/SmartContracts'
 
 import UPortSolutionsMain from 'views/site/main/UPortSolutions'
-/**
- * Verify | Trust Manager
- * 
- * The following Routes correspond with the Trust Manager Prototype
- */
+import ERC20Main from 'views/site/main/ERC20Components'
 
-// // Email
-// import VerifyEmailHeader from 'views/site/header/VerifyEmail'
-// import VerifyEmailMain from 'views/site/main/VerifyEmail'
-// // Twitter
-// import VerifyTwitterHeader from 'views/site/header/VerifyTwitter'
-// import VerifyTwitterMain from 'views/site/main/VerifyTwitter'
-// // Github
-// import VerifyGithubHeader from 'views/site/header/VerifyGithub'
-// import VerifyGithubMain from 'views/site/main/VerifyGithub'
-// // Reddit
-// import VerifyRedditHeader from 'views/site/header/VerifyReddit'
-// import VerifyRedditMain from 'views/site/main/VerifyReddit'
+import MeetupEventMain from 'views/site/main/MeetupEvent'
+import PunchTheClockMain from 'views/site/main/PunchTheClock'
+import EthereumNameSystem from 'views/site/main/EthereumNameSystem'
 
 export default [
   {
@@ -44,6 +31,36 @@ export default [
   {
     path: "/solutions/uport",
     main: UPortSolutionsMain,
+    meta: {
+      exact: true,
+    }
+  },
+
+  // Features
+  {
+    path: "/features/erc20",
+    main: ERC20Main,
+    meta: {
+      exact: true,
+    }
+  },
+  {
+    path: "/features/meetup-event",
+    main: MeetupEventMain,
+    meta: {
+      exact: true,
+    }
+  },
+  {
+    path: "/features/punch-the-clock",
+    main: PunchTheClockMain,
+    meta: {
+      exact: true,
+    }
+  },
+  {
+    path: "/features/ens",
+    main: EthereumNameSystem,
     meta: {
       exact: true,
     }

@@ -93,6 +93,11 @@ a:hover {
   cursor: pointer;
 }
 
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
 button {
   align-items: center;
   border: 0;

@@ -1,7 +1,6 @@
 /* ------------------------- External Dependencies -------------------------- */
 import React from 'react'
 import Foundry from 'foundry'
-console.log(Foundry)
 /* ---------------------------- Module Package ------------------------------ */
 export default ({data, foundry, styled, ...props}) =>!foundry ? null
 : (typeof foundry === 'function')

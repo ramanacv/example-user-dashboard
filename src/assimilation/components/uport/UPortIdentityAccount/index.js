@@ -55,7 +55,7 @@ export default props => props.status && !props.data ? null :
           {idx(props, _=>_.data.phone)}
         </Paragraph>
         <Paragraph f={[1]}>
-          {idx(props, _=>_.data.location)}
+          {idx(props, _=>_.data.country)}
         </Paragraph>
       </Box>
     </Box>

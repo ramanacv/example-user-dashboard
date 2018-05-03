@@ -33,14 +33,6 @@ export default props =>
       </Box>
   
       <Heading level={[3]} f={[4,5]} mt={150} ta='center' >
-        Identity Attestation Form
-      </Heading>
-      <HorizontalRule bi='crimson' />
-      <Box>
-        <UPortAttestIdentityForm/>
-      </Box>
-  
-      <Heading level={[3]} f={[4,5]} mt={150} ta='center' >
         Address Attestation Form
       </Heading>
       <HorizontalRule bi='crimson' />

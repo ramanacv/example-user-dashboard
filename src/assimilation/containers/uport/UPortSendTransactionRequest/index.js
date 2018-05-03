@@ -7,8 +7,6 @@ import { fromUport } from 'assimilation/store/selectors'
 import { uPortSendTransactionRequest } from 'assimilation/store/actions'
 import UPortSendTransaction from 'assimilation/components/uport/UPortSendTransaction'
 import {MeetupEvent} from 'contracts'
-
-console.log(MeetupEvent)
 /* ---------------------------- Module Package ------------------------------ */
 /*-* Redux *-*/
 const mapStateToProps = (state, props) => ({

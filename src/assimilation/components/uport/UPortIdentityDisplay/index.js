@@ -8,6 +8,7 @@ import {
   BackgroundImage, BackgroundGradient
 } from 'atomic'
 import UPortIdentityCard from 'assimilation/components/uport/UPortIdentityCard'
+import UPortIdentityCardAcount from 'assimilation/components/uport/UPortIdentityCardAcount'
 import UPortIdentityBlockchain from 'assimilation/components/uport/UPortIdentityBlockchain'
 import UPortAvatar from 'assimilation/components/uport/UPortAvatar'
 import UPortAvatarMenu from 'assimilation/components/uport/UPortAvatarMenu'
@@ -21,9 +22,8 @@ export default props => props.status
     avatar: <UPortAvatar {...props}/>, 
     avatarMenu: <UPortAvatarMenu {...props}/>, 
     card: <UPortIdentityCard {...props}/>, 
+    cardAccount: <UPortIdentityCardAcount {...props}/>, 
     cardBlockchain: <UPortIdentityBlockchain {...props}/>, 
-    cardAdvanced: <UPortAvatar {...props}/>, 
-    cardAccount: <UPortIdentityAccount {...props}/>, 
 
   }[props.display] || "Select Component"
 

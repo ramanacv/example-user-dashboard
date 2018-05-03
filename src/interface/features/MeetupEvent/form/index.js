@@ -22,18 +22,6 @@ import UportCredentialsRequest from 'assimilation/containers/uport/UPortCredenti
 /* ---------------------------- Form Component ------------------------------ */
 export default ({ handleSubmit, isSubmitting, styled, ...props}) =>
 <Box w={1}>
-  <Flex
-    direction='column'
-    justify='center'
-    ta='center'
-    w={1} >
-    <Heading level={[3]} f={[5]} fw='300' mr={15} >
-      Public Event RSVP
-    </Heading>
-    <Paragraph f={[1]}>
-      Attend an event by adding your name to a public registry.
-    </Paragraph>
-  </Flex>
   <Box mb={20}>
     <UportCredentialsRequest/>
   </Box>
@@ -63,7 +51,7 @@ export default ({ handleSubmit, isSubmitting, styled, ...props}) =>
         <Heading f={[3,4]} color="purple" >
           <Span py={10} >{attendee[1]}</Span>
         </Heading>
-        <Span f={0} >{ idx(props, _=>_.attendeeListData[0][i])}</Span>
+        <Span f={0} >{ idx(props, _=>_.attendeeListData[i])}</Span>
       </Box>
       )}
     </Flex>

@@ -4,10 +4,13 @@ import { put, takeEvery } from 'redux-saga/effects';
 import actions from './actions'
 import ethers from 'ethers'
 import { EthersBlockFlowIn } from 'logic/interface/DataScaffold'
-
+import MetamaskSigner from './metamask.js'
+import {ERC20} from 'contracts'
 // Initialize
 const Wallet = ethers.Wallet;
+const Contract = ethers.Contract;
 const providers = ethers.providers;
+
 
 const networkRouting = network => {
   switch(idx(network, _=>_.provider)) {
@@ -17,11 +20,14 @@ const networkRouting = network => {
       return window.ethereum.providers.test;
     case 'infura':
       return window.ethereum.providers.infura;
+    case 'metamask':
+      return new ethers.providers.Web3Provider(window.web3.currentProvider); // Use Mist/MetaMask's provider
     default:
       return providers.getDefaultProvider(network.chain) 
   }
 }
 
+// Network List
 const networkList = {
   'homestead': providers.networks.homestead,
   'ropsten': providers.networks.ropsten,
@@ -29,9 +35,7 @@ const networkList = {
   'kovan': providers.networks.kovan,
 }
 
-// TODO : Make a better global store.
-// This was a hacky addition, so I can add "Contracts" to the global window scope using the "delta" identifier in Redux dispatches.
-// Refer to the contractInit() function for an example.
+// Global State
 window.ethereum = {
   contracts: {},
   providers: {}
@@ -291,13 +295,13 @@ export function * ensResolveName ({payload, metadata}) {
   try {
     const { network } = metadata
     const provider = networkRouting(network)
-    const ethName = payload
-    const address = yield provider.resolveName(ethName)
+    const address = yield provider.resolveName(payload)
     yield put(actions.ensResolveName("SUCCESS")(
       address,
       metadata,
     ))
   } catch (err) {
+    console.log(err)
     yield put(actions.ensResolveName("FAILURE")(
       {
         error: err.message,
@@ -384,7 +388,7 @@ export function * providerInfura ({payload, metadata}) {
       metadata,
     ))
   } catch (err) {
-    console.log(err)
+    if(process.env.REACT_APP_GLOBAL_DEBUG) console.log(err)
     yield put(actions.providerInfura("FAILURE")(
       {
         error: err.message,
@@ -403,6 +407,7 @@ export function * providerFallback ({payload, metadata}) {
       metadata,
     ))
   } catch (err) {
+    if(process.env.REACT_APP_GLOBAL_DEBUG) console.log(err)
     yield put(actions.providerFallback("FAILURE")(
       {
         error: err.message,
@@ -421,6 +426,7 @@ export function * providerDefault ({payload, metadata}) {
       metadata,
     ))
   } catch (err) {
+    if(process.env.REACT_APP_GLOBAL_DEBUG) console.log(err)
     yield put(actions.providerDefault("FAILURE")(
       {
         error: err.message,
@@ -465,6 +471,7 @@ export function * accountTransactionCount ({payload, metadata}) {
       metadata,
     ))
   } catch (err) {
+    if(process.env.REACT_APP_GLOBAL_DEBUG) console.log(err)
     yield put(actions.accountTransactionCount("FAILURE")(
       {
         error: err.message,
@@ -480,25 +487,25 @@ export function * contractCreate ({payload, metadata}) {
     const { network, delta } = metadata
     const {ethAddress, ethAbi, ethereumPrivateKey, contractName } = payload
     if (!contractName) throw new Error('Ethers: Contracts must be created with a name identifier.')
-
     // Initialize Provider
     const provider = networkRouting(network)
     // Create Contact
     let contract;
     if(ethereumPrivateKey) {
-      const wallet = new Wallet(ethereumPrivateKey);wallet.provider = provider
+      const wallet = new Wallet(ethereumPrivateKey);
+      wallet.provider = provider
       contract = new ethers.Contract(ethAddress, ethAbi, wallet);
     } else {
       contract = new ethers.Contract(ethAddress, ethAbi, provider);
     }
-    console.log(contract)
+
     window.ethereum.contracts[contractName] = contract
     yield put(actions.contractCreate("SUCCESS")(
       contract,
       metadata,
     ))
   } catch (err) {
-    console.log(err)
+    if(process.env.REACT_APP_GLOBAL_DEBUG) console.log(err)
     yield put(actions.contractCreate("FAILURE")(
       {
         error: err.message,
@@ -511,7 +518,6 @@ export function * contractCreate ({payload, metadata}) {
  
 export function * contractCall ({payload, metadata}) {
   try {
-
     const { contractName, contractFunction, contractParams } = payload
     const contract = window.ethereum.contracts[contractName]
     if (!contract[contractFunction]) throw new Error("Ethers: Contracts function doesn't exist")
@@ -523,7 +529,7 @@ export function * contractCall ({payload, metadata}) {
       metadata,
     ))
   } catch (err) {
-    console.log(err)
+    if(process.env.REACT_APP_GLOBAL_DEBUG) console.log(err)
     yield put(actions.contractCall("FAILURE")(
       {
         error: err.message,
@@ -561,6 +567,32 @@ export function * contractSendTransaction ({payload, metadata}) {
     ))
   } catch (err) {
     yield put(actions.contractSendTransaction("FAILURE")(
+      {
+        error: err.message,
+      },
+      metadata,
+    ))
+  }
+}
+
+export function * contractDeploy ({payload, metadata}) {
+  try {
+    const { network, delta } = metadata
+    const { bytecode, abi, params } = payload
+    const provider = networkRouting(network)
+    const wallet = new MetamaskSigner(window.web3, provider);
+    const deployTransaction = ethers.Contract.getDeployTransaction(
+      bytecode, abi, // Smart Contract Metadata
+      params.amount, params.name, params.decimals, params.symbol // Smart Contract Input Parameters
+    );
+    const sendPromise = yield wallet.sendTransaction(deployTransaction);
+    yield put(actions.contractDeploy("SUCCESS")(
+      payload,
+      metadata,
+    ))
+  } catch (err) {
+    if(process.env.REACT_APP_GLOBAL_DEBUG) console.log(err)
+    yield put(actions.contractDeploy("FAILURE")(
       {
         error: err.message,
       },
@@ -660,6 +692,7 @@ export default function* ethersSaga() {
     takeEvery(actions.CONTRACT_CALL.REQUEST, contractCall),
     takeEvery(actions.CONTRACT_ESTIMATE_GAS.REQUEST, contractEstimateGas),
     takeEvery(actions.CONTRACT_SEND_TRANSACTION.REQUEST, contractSendTransaction),
+    takeEvery(actions.CONTRACT_DEPLOY.REQUEST, contractDeploy),
 
 
     // ADDITIONAL 

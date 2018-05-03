@@ -77,6 +77,7 @@ function* getCredentials({payload, metadata}) {
       metadata
     }))
   } catch(e) {
+    console.log(e)
     yield put(uPortGetCredentialsFailure({payload: e, metadata}))
   }
 }
@@ -153,19 +154,14 @@ function* sendTransaction({payload, metadata}) {
 function* sendTransactionNew({payload, metadata}) {
   try {
     const { contractABI, contractAddress, contractFunction } = payload
-
-    console.log(MeetupEvent)
     const provider = ethers.providers.getDefaultProvider('rinkeby')
-    console.log(uPortWeb3)
     const contractEthers = new uPortWeb3.eth.Contract("0x03f41ad7789956fc512f601c15cef1e222adc280", MeetupEvent.abi);
 
     // const contractInstance = uPortConnection.contract(contractABI)
     // const contract = contractInstance.at('0x03f41ad7789956fc512f601c15cef1e222adc280')
     // const contractStatus = yield contract.rsvpMe("buidl",);
 
-    console.log(contractEthers.rsvpMe)
     var callData = contractEthers.rsvpMe.getData('Kames');
-    console.log(callData)
 
     const txobject = {
       to: '0x03f41ad7789956fc512f601c15cef1e222adc280',

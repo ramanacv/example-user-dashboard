@@ -47,11 +47,7 @@ const QueryLifecycle = lifecycle(
 {
   componentDidMount()
   {
-
     this.props.contractCreate(this.props.ethAbi)
-    console.log(change)
-    
-
   },
   componentDidUpdate(prevProps)
   {
@@ -72,17 +68,13 @@ const QueryLifecycle = lifecycle(
      */
     if(
       this.props.contractState && !this.props.attendeeListScan 
-      && this.props.attendeeScan && this.props.attendeeListData[0]) 
-      {
-      if(this.props.attendeeListData[0]){
-        this.props.attendeeListData[0].map(attendee=>{
+      && this.props.attendeeScan) {
+      if(this.props.attendeeListData[1]){ // TODO(@kamescg): Dirty way to check if data is in array format. Could be done better.
+        this.props.attendeeListData.map(attendee=>{
           this.props.getAttendeeInformation(attendee)
         })
+        this.props.attendeeScanToggle(toggle=>!toggle)
       }
-      // this.props.attendeeListAdd
-      // // this.props.getAttendees()
-
-      this.props.attendeeScanToggle(toggle=>!toggle)
     }
   }
 })
@@ -95,13 +87,12 @@ const mapStateToProps = (state, props) => {
     identityStatus: fromUport.getDeltaStatus(state, `credentials`),
     rsvpData: fromUport.getDeltaData(state, 'contract|transaction|rsvp'),
     rsvpStatus: fromUport.getDeltaStatus(state, `contract|transaction|rsvp`),
+
     // Ethers
     contractState: fromEthers.getDeltaStatus(state,  `contract|${props.contractName}|${props.contractAddress}|create`),
     attendeeListData: fromEthers.getDeltaData(state, `contract|${props.contractName}|${props.contractAddress}|attendeeAddresses`),
     attendeeListStatus: fromEthers.getDeltaStatus(state, `contract|${props.contractName}|${props.contractAddress}|attendeeAddresses`),
     attendeeInformationList: fromEthers.getStartingData(state, `contract|item|${props.contractName}|${props.contractAddress}|`),
-    attendeeData: fromEthers.getDeltaData(state, "contract|meetup|attendeeInformation"),
-    attendeeStatus: fromEthers.getDeltaStatus(state, "contract|meetup|attendeeInformation"),
   }
 }
 
@@ -137,9 +128,13 @@ const mapDispatchToProps = (dispatch, props) => ({
     },
     {
       delta: `contract|${props.contractName}|${props.contractAddress}|attendeeAddresses`,
-      network: 'rinkeby'
+      network: {
+        provider: 'infura',
+        chain: props.chain || 'rinkeby',
+      }
     }
   )),
+
   /**
    * Attendee Information
    * Scan the MeetupEvent Smart Contract for registered attendees
@@ -154,7 +149,10 @@ const mapDispatchToProps = (dispatch, props) => ({
     },
     {
       delta:`contract|item|${props.contractName}|${props.contractAddress}|${attendee}`,
-      network: 'rinkeby'
+      network: {
+        provider: 'infura',
+        chain: props.chain || 'rinkeby',
+      }
     }
   )),
   uPortRsvp: (name)=>dispatch(uPortSendTransactionRequest({

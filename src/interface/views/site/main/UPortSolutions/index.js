@@ -21,11 +21,11 @@ import AuthorizationLogin from 'containers/authentication/AuthorizationLogin'
 /* ------------------------------- Component -------------------------------- */
 export default props =>
 <Box align='center' justify='center'>
-  <Container w={[620]} py={25} >
-    <UPortCredentialsAuthRequest display="cardAccount" styled={{mt: 30}} />
-    <hr/>
-    <IdentityLogin>Login with QuestKey</IdentityLogin>
-    <UPortAttestFirebase/>
+<Container w={[420]} py={50} >
+  <UportCredentialsRequest
+    display="cardAccount"
+    requested={['name', 'avatar', 'country', 'location', 'phone', 'email']}
+  />
   </Container>
   <Container w={[620]} py={50} >
     <Heading f={[3]}>
@@ -36,25 +36,25 @@ export default props =>
         <Heading f={[3]} ta="center" >
           Avatar
         </Heading>
-        <UportCredentialsRequest display="avatar" styled={{mt: 30}} />
+        <UportCredentialsRequest display="avatar" styled={{mt: 30}} requested={['name', 'avatar', 'country', 'location', 'phone', 'email']} />
       </Box>
       <Box boxShadow={1} br={15} mt={40} p={20} >
         <Heading f={[3]} ta="center" >
           Avatar with Menu (Click Avatar)
         </Heading>
-        <UportCredentialsRequest display="avatarMenu" styled={{mt: 30}} />
+        <UportCredentialsRequest display="avatarMenu" styled={{mt: 30}} requested={['name', 'avatar', 'country', 'location', 'phone', 'email']}/>
       </Box>
       <Box boxShadow={1} br={15}  mt={40} p={20} >
         <Heading f={[3]} ta="center" >
           Identity Card
         </Heading>
-        <UportCredentialsRequest display="card" styled={{mt: 30}} />
+        <UportCredentialsRequest display="card" styled={{mt: 30}} requested={['name', 'avatar', 'country', 'location', 'phone', 'email']}/>
       </Box>
       <Box boxShadow={1} br={15}  mt={40} p={20} >
         <Heading f={[3]} ta="center" >
           Identity Blockchain
         </Heading>
-        <UportCredentialsRequest display="cardBlockchain" styled={{mt: 30}} />
+        <UportCredentialsRequest display="cardBlockchain" styled={{mt: 30}} requested={['name', 'avatar', 'country', 'location', 'phone', 'email']}/>
       </Box>
   </Container>
 </Box>

@@ -94,16 +94,34 @@ export default props =>
       </Flex>
     </Container>
 
-    <Container w={[620]} ta='center' py={150} >
+    <Container w={[1220]} ta='center' py={150} >
       <Box p={40} gradient="purple" color="white" boxShadow={3} >
-        {/* <MeetupEvent
-          contractAddress="0x311a70681f008d51f01e75032ee766718c9d74ba"
-          contractName="MeetupEvent"
-        /> */}
-        <PunchTheClock
-          contractAddress="0x4a7103b350ea25cca5903bdd99ab7907c3f05a64"
-          contractName="PunchTheClock"
-        />
+      <Flex
+        direction='column'
+        justify='center'
+        ta='center'
+        w={1} >
+        <Heading level={[3]} f={[5]} fw='300' mr={15} >
+          Event Registration Demos
+        </Heading>
+        <Paragraph f={[1]}>
+          Examples of registering and participating in events with uPort
+        </Paragraph>
+      </Flex>
+        <Flex w={1}>
+          <Box w={[1,0.5]} p={20} >
+            <MeetupEvent
+              contractAddress="0x311a70681f008d51f01e75032ee766718c9d74ba"
+              contractName="MeetupEvent"
+            />
+          </Box>
+          <Box w={[1,0.5]} p={20} >
+            <PunchTheClock
+              contractAddress="0x565b6d77edac2edd9551177620e6f1185dc5feac"
+              contractName="PunchTheClock"
+              />
+          </Box>
+        </Flex>
       </Box>
     </Container>
   <Resources/>

@@ -78,12 +78,8 @@ const databaseRead = ({entity, branch = [], boundaries = {}, order = {} }) => ne
 });
 const databaseReadSingle = ({entity, branch = [], boundaries = {}, order = {} }) => new Promise((resolve, reject) => {
   const dataNew = []
-  console.log('starting')
-  console.log(branch)
   let pathReference = admin.database().ref(`/${entity}/${_.join(branch, '/')}`);
-  console.log(pathReference)
   pathReference.once('value', function(snapshot) {
-    console.log(snapshot.val())
     resolve(snapshot.val())
   });
 

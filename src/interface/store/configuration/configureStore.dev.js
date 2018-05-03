@@ -58,6 +58,7 @@ const configureStore = (initialState, services = {}) => {
   if (module.hot) {
     module.hot.accept('../departments/reducer', () => {
       const nextReducer = require('../departments/reducer').default
+
       store.replaceReducer(nextReducer)
     })
     module.hot.accept('../departments/sagas', () => {

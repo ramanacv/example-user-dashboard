@@ -13,12 +13,15 @@ export default props =>
     Welcome to the Decentralized Ecosystem
   </Heading>
   <Paragraph f={[1]}>
-    Sed interdum tortor vitae sapien porttitor gravida eget et risus. Nunc elementum dolor eu augue fermentum, sed condimentum lorem elementum. Praesent interdum dolor id lectus laoreet, at suscipit mauris vehicula. Phasellus erat tellus, semper quis massa vitae, vehicula fermentum libero. Sed id neque sem. Pellentesque a orci consequat, ornare nisi et, euismod massa. Morbi iaculis elit sapien, non congue elit interdum vel. Etiam odio arcu, lacinia eget volutpat ut, ullamcorper quis purus. Etiam sollicitudin dictum eros id placerat. Cras et auctor enim. Aliquam sed tristique massa.
+    <strong>Are you ready to start buidling?</strong> The Ethereum Blockchain is an amazing technology. But, it can be complicated for new developers. Understanding how to use state management systems like a Blockchain/Redux and wrapping encapsulated logic is no small task.
   </Paragraph>
   <Paragraph f={[1]}>
-    Phasellus malesuada, ante elementum vehicula pretium, nisi turpis consequat nunc, vitae faucibus massa nulla a dolor. Nullam nec velit a nisi sodales dictum. Sed ac sem quis turpis molestie laoreet quis sed arcu. Aenean ligula risus, bibendum vel commodo vitae, dapibus vel nisl. Sed interdum tortor vitae sapien porttitor gravida eget et risus. Nunc elementum dolor eu augue fermentum, sed condimentum lorem elementum.
+    The BuidlBox helps developers quickly and easily build non-trivial applications using ready-to-go code and examples. 
   </Paragraph>
   <Paragraph f={[1]}>
-    Sed interdum tortor vitae sapien porttitor gravida eget et risus. Nunc elementum dolor eu augue fermentum, sed condimentum lorem elementum. Praesent interdum dolor id lectus laoreet, at suscipit mauris vehicula. Phasellus erat tellus, semper quis massa vitae, vehicula fermentum libero. Sed id neque sem. Pellentesque a orci consequat, ornare nisi et, euismod massa. Morbi iaculis elit sapien, non congue elit interdum vel. Etiam odio arcu, lacinia eget volutpat ut, ullamcorper quis purus. Etiam sollicitudin dictum eros id placerat. Cras et auctor enim. Aliquam sed tristique massa.
+    uPort wants to all developers to achieve maximum velocity. Which is why we're creating the BuidlBox to include more then just uPort. Yes. Of course we want you to build with uPort. But more importantly we want you meaningful and unique solutions to challenging problems. 
   </Paragraph>
+  <Heading f={[3]}>
+    Open Source the World
+  </Heading>
 </Box>

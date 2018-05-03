@@ -102,7 +102,6 @@ function* loginWithEmailPassword({payload, metadata}) {
 
 /*--- Login With Phone ---*/
 function* loginWithIdentity({payload, metadata}) {
-  console.log(payload)
   try {
     const tokenIdentity = yield fetch('https://us-central1-buidlbox-dev.cloudfunctions.net/identity',{
       mode: 'cors',

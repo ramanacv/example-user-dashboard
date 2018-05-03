@@ -2,12 +2,22 @@ pragma solidity ^0.4.16;
 
 contract PunchTheClock {
 
-    function PunchTheClock() public {
-        admin = msg.sender;
-    }
-
     address public admin;
-    uint public registrationCost;
+    address public contractToken;
+    string public name;
+    uint public arrivalsCount;
+    uint public departuresCount;
+    uint public timeMin;
+    uint public timeMax;
+
+    function PunchTheClock(string _name, uint _timeMin, uint _timeMax) public {
+        admin = msg.sender;
+        name = _name;
+        arrivalsCount = 0;
+        departuresCount = 0;
+        timeMin = _timeMin;
+        timeMax = _timeMax;
+    }
 
     /**
      * Structs
@@ -16,10 +26,13 @@ contract PunchTheClock {
     */
     struct entity {
         string name;
-        bool isRegistered;
+        bool isActive;
         bool isApproved;
+        bool isRegistered;
         uint arrivals;
         uint departures;
+        uint timeArrived;
+        uint timeDeparted;
     }
 
     struct timestamp {
@@ -56,9 +69,9 @@ contract PunchTheClock {
       string _name
     );
     
-
-    event Error(address indexed _sender, bytes32 error);
-
+    /**
+     * Modifiers
+    */
     modifier isAdmin() {
         require(admin == msg.sender);
         _;
@@ -66,6 +79,16 @@ contract PunchTheClock {
 
     modifier isApproved() {
         require(entityList[msg.sender].isApproved == true);
+        _;
+    }
+
+    modifier isComplete() {
+        require(now >= entityList[msg.sender].timeArrived + timeMin); 
+        _;
+    }
+
+    modifier isReasonable() {
+        require(now <= entityList[msg.sender].timeArrived + timeMax); 
         _;
     }
 
@@ -77,50 +100,66 @@ contract PunchTheClock {
      * Administrator Privileges
      */
     function adminApprove(address _address) public isAdmin {
-        entityList[msg.sender].isApproved = true;
+        entityList[_address].isApproved = true;
     }
-
     function adminRevoke(address _address) public isAdmin {
-        entityList[msg.sender].isApproved = false;
+        entityList[_address].isApproved = false;
+    }
+    function adminDeactivate(address _address) public isAdmin {
+        entityList[_address].isActive = false;
+    }
+    function adminNameEntity(address _address, string _name) public isAdmin {
+        entityList[_address].name = _name;
     }
 
     /**
      * Entity Privileges
      */
-    function arrive() public isApproved {
-        arrivalList[entityList[msg.sender].arrivals++].eid = msg.sender;
-        arrivalList[entityList[msg.sender].arrivals++].time = now;
-        EventArrive(msg.sender, entityList[msg.sender].name);
+    function name(string _name) public isApproved {
+        entityList[msg.sender].name = _name;
     }
-    function depart() public isApproved {
-        departList[entityList[msg.sender].departures++].eid = msg.sender;
-        departList[entityList[msg.sender].departures++].time = now;
-        EventDepart(msg.sender, entityList[msg.sender].name);
+    
+    function arrive() public isApproved {
+        arrivalList[arrivalsCount].eid = msg.sender;
+        arrivalList[arrivalsCount].time = now;
+        entityList[msg.sender].isActive = true;
+        entityList[msg.sender].arrivals++; 
+        entityList[msg.sender].timeArrived = now;
+        arrivalsCount++;
     }
 
-    /**
-     * Register Entity
-     */
-    function registerEntity(string _name) public {
+    function depart() public isApproved isComplete isReasonable {
+        departList[departuresCount].eid = msg.sender;
+        departList[departuresCount].time = now;
+        entityList[msg.sender].isActive = false;
+        entityList[msg.sender].departures++;
+        entityList[msg.sender].timeDeparted = now;
+        departuresCount++;
+    }
+
+    function register() public {
         require(!isRegistered(msg.sender));
-        entityList[msg.sender].name = _name;
         entityList[msg.sender].isRegistered = true;
         entityList[msg.sender].isApproved = false;
         entityList[msg.sender].arrivals = 0;
         entityList[msg.sender].departures = 0;
+        registeredList.push(msg.sender);
     }
 
+    /**
+     * External Callbacks
+     */
+
+
+    /**
+     * Views
+     */
     function getRegisteredAddresses() view public returns (address[]) {
         return registeredList;
     }
 
-    function getEntityData(address _address) view public returns (string, bool, uint, uint) {
-        return (
-          entityList[_address].name,
-          entityList[_address].isApproved,
-          entityList[_address].arrivals,
-          entityList[_address].departures
-        );
+    function getEntityData(address _address) view public returns (string, bool, bool, uint, uint, uint, uint) {
+        return (entityList[_address].name, entityList[_address].isApproved, entityList[_address].isActive, entityList[_address].timeArrived, entityList[_address].timeDeparted, entityList[_address].arrivals, entityList[_address].departures);
     }
 
 }

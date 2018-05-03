@@ -21,7 +21,11 @@ const onSubmit = (data, dispatch, props) => new Promise((resolve, reject) => {
   dispatch(ethers.ensResolveName("REQUEST")(
     submission, 
     {
-      delta: `resolve|form`
+      delta: `resolve|form`,
+      network: {
+        provider: 'default',
+        chain: props.chain || 'homestead',
+      }
     }
   ))
 })
