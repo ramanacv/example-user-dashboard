@@ -18,14 +18,20 @@ const DialogFactory = (props) => {
     modal:false,
     open:open,
     onRequestClose:props.dialogClose,
+    style: {
+      background: 'none',
+    },
+    contentStyle: {
+      background: 'none',
+      backgroundColor: 'none',
+      boxShadow: 'none'
+    }
   }
 
   return (
-    <Box {...props} z={1000}>
-      <Dialog {...DialogSettings} >
-        <Item foundry={open}/>
-      </Dialog>
-    </Box>
+    <Dialog {...DialogSettings} >
+      <Item foundry={open}/>
+    </Dialog>
   )
 }
 

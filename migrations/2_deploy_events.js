@@ -1,6 +1,6 @@
 const MeetupEvent = artifacts.require('./MeetupEvent.sol');
 
-const deploy = true
+const deploy = false
 
 module.exports = !deploy ? null : (deployer) => {
   deployer.deploy(MeetupEvent,

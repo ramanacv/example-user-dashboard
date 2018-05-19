@@ -108,26 +108,11 @@ function* loginWithIdentity({payload, metadata}) {
       headers: new Headers({'content-type': 'application/json'}),
       method: 'post',
       body: JSON.stringify({
-        data: payload.questKey
+        JWT: payload
       })
       ,
     }).then(token=> token.json())
-
     const loginSuccess = yield firebase.auth().signInWithCustomToken(tokenIdentity)
-
-    const userCurrent = yield firebase.auth().currentUser;
-    const profileUpdate = yield userCurrent.updateProfile({
-      displayName: payload.name,
-      photoURL: payload.avatar.uri
-    })
-    const metadata = {
-      branch: ['users', `${payload.address}|${payload.questKey}` ],
-      delta: 'database|write',
-      writeType: 'patch'
-    }
-    const saveUserProfile = yield put(databaseWriteRequest({payload, metadata }))
-    console.log(saveUserProfile)
-
     yield put({type: AUTH_LOGIN_WITH_IDENTITY_SUCCESS })
     yield put({type: AUTH_LOGIN_SUCCESS})
   } catch(err) {

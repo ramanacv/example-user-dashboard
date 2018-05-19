@@ -7,15 +7,18 @@ import {
   BackgroundGradient
 } from 'atomic'
 
-import UPortAttestAddressForm from 'features/uport/UPortAttestAddressForm'
-import UPortAttestEvent from 'features/uport/UPortAttestEvent'
-import EventsList from 'features/Events/EventsList'
+
+import UPortLoginFirebase from 'assimilation/containers/uport/UPortLoginFirebase'
+import UPortCredentialsRequest from 'assimilation/containers/uport/UPortCredentialsRequest'
+import {AuthorizationLogin, UserProfile} from 'containers'
 /* ------------------------------- Component -------------------------------- */
 export default props =>
-<Box align='center' justify='center' py={100} >
-  <Container mt={25} w={[860]} >
-    <UPortAttestAddressForm/>
-    <UPortAttestEvent/>
-    <EventsList/>
+<Box align='center' justify='center'>
+<Container w={[720]} py={50} >
+  <UPortLoginFirebase
+    display="cardAccount"
+    requested={['name']}
+    notifications={true}
+  />
   </Container>
 </Box>

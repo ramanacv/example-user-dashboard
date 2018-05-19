@@ -1,24 +1,20 @@
 /* ------------------------ Node.js Dependencies ------------------------ */
 const URL = require('url-parse');
-
 /* ------------------------ External Dependencies ------------------------ */
-const functions = require('firebase-functions') // We can use `import` sytax. Why? idn... @kamescg
-const admin = require('firebase-admin') // We can use `import` sytax. Why? idn... @kamescg
-const ethers = require('ethers');
-
-const uuid = require('uuid/v1');
-const express =  require('express');
 const uport = require('uport');
-const Credentials = uport.Credentials;
-const SimpleSigner = uport.SimpleSigner;
-// // import { Credentials, SimpleSigner } from 'uport'
-const serviceAccount = require('../secrets/service_account.json')
+const uuid = require('uuid/v1');
+const ethers = require('ethers');
+const express =  require('express');
+const admin = require('firebase-admin')
+const functions = require('firebase-functions')
+const cors = require('cors')({origin: true});
 /* ------------------------- Internal Dependencies -------------------------- */
-const cors = require('cors');
-const db = require('./database');
+const database = require('./database');
 
 // Constants
-cors({origin: true});
+const Credentials = uport.Credentials;
+const SimpleSigner = uport.SimpleSigner;
+const serviceAccount = require('../secrets/service_account.json')
 const databaseURL = "https://buidlbox-dev.firebaseio.com"
 
 /**
@@ -31,6 +27,12 @@ const databaseURL = "https://buidlbox-dev.firebaseio.com"
  */
 // const uportSimpleSigner = functions.config().uport.simplesigner;
 const uportSimpleSigner = SimpleSigner('d12d8a5c643ab7facc0a1815807aba1bed174762a2061b6b098b7bffd7462236')
+const uportCredentials = new Credentials({
+  appName: 'Eidenai',
+  address: '2oo7fQjxR44MnKa8n4XKDZBBa2Buty4qrug',
+  signer: uportSimpleSigner,
+  networks: {'0x4': {'registry' : '0x2cc31912b2b0f3075a87b3640923d45a26cef3ee', 'rpcUrl' : 'https://rinkeby.infura.io'}}
+})
 
 /* ------------------------ Initialize Dependencies ------------------------- */
 /**
@@ -55,15 +57,54 @@ const firestore = admin.firestore();
 /*---*---------------              ---------------*---*/
 exports.identity = functions.https.onRequest((request,response)=> {
   cors(request, response, () => {
-    admin.auth().createCustomToken(request.body.data)
-    .then(function(customToken) {
-      response.json(customToken).send()
-    })
-    .catch(function(error) {
-      response.send(error)
-      console.log("Error creating custom token:", error);
-    });
+    const JWT = request.body.JWT
+    uportCredentials.receive(JWT)
+    .then(profile => {
+      if(profile.name) admin.auth().updateUser(profile.address,{
+        displayName: profile.name
+      })
+      if(profile.avatar) admin.auth().updateUser(profile.address,{
+        photoURL: profile.avatar.uri
+      })
+      admin.auth().createCustomToken(profile.address)
+      .then(function(customToken) {
+        response.json(customToken).send()
+        database.databaseWrite({
+          writeType: 'update',
+          branch: ["users", profile.address, 'profile'],
+          payload: {
+            ...profile
+          },
+        })
+      })
+      .catch(function(error) {
+        response.send(error)
+        console.log("Error creating custom token:", error);
+      });
+  })
+  .catch(function(error) {
+    response.send(error)
+    console.log("Error creating custom token:", error);
+  });
+
   })  
+})
+
+
+/**
+ * Identity Callback
+ * @desc Callback URL for the uPort Identity
+ */
+exports.identityCallback = functions.https.onRequest((request,response)=> {
+  const UID = request.query.uid
+  const accessToken = request.body.access_token
+  database.databaseWrite({
+    writeType: 'update',
+    branch: ["request", 'login', UID, 'data'],
+    payload: {
+      JWT: accessToken
+    },
+  })
 })
 
 /*---*---------------              ---------------*---* 
@@ -71,69 +112,142 @@ exports.identity = functions.https.onRequest((request,response)=> {
                     Database Requests 
 
 /*---*---------------              ---------------*---*/
-exports.attestationRequest = functions.database.ref('/request/attestation/{request}')
+
+/**
+ * Manage Attestation Requests
+ * 
+ * TODO(@kamescg): Better Attestation Verification database naming structure.
+ * 
+ * Currently the '/request/attestation/' path is montired for database changes.
+ * This is just a starting point and MVP for data streaming between frontend/backend
+ *  
+ * The process needs to be more thoroughly thought about to fully understand how we
+ * can enable as many verifiatons systems to "hook" into our private verification attestation
+ * framework/boilerplate. 
+ */
+
+exports.attestationRequest = functions.database.ref('/request/{type}/{request}')
   .onCreate(event => {
     const eventKey = event.data.key 
     const eventData = event.data.val()
     if(eventData.meta.status) {
       switch(eventData.meta.status) {
-
-        /**
-         * Manage Attestation Requests
-         * 
-         * TODO(@kamescg): Better Attestation Verification database naming structure.
-         * 
-         * Currently the '/request/attestation/' path is montired for database changes.
-         * This is just a starting point and MVP for data streaming between frontend/backend
-         *  
-         * The process needs to be more thoroughly thought about to fully understand how we
-         * can enable as many verifiatons systems to "hook" into our private verification attestation
-         * framework/boilerplate. 
-         */
-
         case('initialized'):
-              db.databaseSearch({
-                branch: ["users"],
-                boundaries: {
-                  equalTo: eventData.meta.uid
-                },
-                order: {
-                  orderByChild: "questKey" // QuestKey is a param specific to a @kamescg project. This needs to be changed for all projects.
-                }
-              }).then(lookup=>{
-                var credentials = new Credentials({
-                  appName: 'Eidenai',
-                  address: '2oo7fQjxR44MnKa8n4XKDZBBa2Buty4qrug',
-                  signer: uportSimpleSigner,
-                  networks: {'0x4': {'registry' : '0x2cc31912b2b0f3075a87b3640923d45a26cef3ee', 'rpcUrl' : 'https://rinkeby.infura.io'}}
-                }).attest({
-                  sub: lookup[0].address,
-                  claim: {
-                    ...eventData.data
-                  }
-                }).then(attestation=>{
-                    db.databaseWrite({
-                      config: {writeType: 'update'},
-                      entity: 'users',
-                      branch: ["request", 'attestation', eventKey],
-                      payload: {
-                        ...eventData,
-                        admin: {
-                          attestation: `me.uport:add?attestations=${attestation}`, // TODO(@kamescg) Update this JWT generation using Zach's new libraries.
-                          issued: true
-                        }
-                      },
-                    })
-
-                }).catch(err=>console.log(err))
-            })
-          break;
-          default:
-          // TODO(@kamescg): Handle default use case. 
-          break;
+          switch(eventData.meta.type) {
+            case('login'):
+            return loginGenerate(eventData, eventKey)
+            case('attestation'):
+            return attestationGenerate(eventData, eventKey)
+          }
+        default:
+        // TODO(@kamescg): Handle default use case. 
+        break;
       }
     }
   })
+
+
+exports.eventRequest = functions.database.ref('/events/{event}')
+.onCreate(event => {
+  const eventKey = event.data.key 
+  const eventData = event.data.val()
+  if(eventData.meta.status) {
+    switch(eventData.meta.status) {
+      case('initialized'):
+        return eventGenerate(eventData, eventKey)
+      default:
+      // TODO(@kamescg): Handle default use case. 
+      break;
+    }
+  }
+})
+
+
+const loginGenerate = (eventData, eventKey) => {
+  return uportCredentials.createRequest({
+    requested: eventData.input.requested,
+    notifications: eventData.input.notifications,
+    callbackUrl: `https://us-central1-buidlbox-dev.cloudfunctions.net/identityCallback?uid=${eventKey}`
+  }).then(requestToken => {
+    database.databaseWrite({
+      writeType: 'update',
+      branch: ["request", 'login', eventKey],
+      payload: {
+        data: {
+          qr: `me.uport:me?requestToken=${requestToken}`
+        },
+        meta: {
+          status: 'requested',
+          type: 'login'
+        }
+      },
+    })
+  })
+}
+
+const attestationGenerate = (eventData, eventKey) => {
+  return database.databaseSearch({
+    branch: ["users"],
+    boundaries: {
+      child: eventData.meta.uid
+    },
+  }).then(lookup=>{
+    uportCredentials.attest({
+      sub: lookup[0].address,
+      claim: {
+        ...eventData.data
+      }
+    }).then(attestation=>{
+      const url =  `me.uport:add?attestations=${attestation}`
+      uportCredentials.push(lookup[0].pushToken, lookup[0].publicEncKey, {url}).then(response => {
+        database.databaseWrite({
+          writeType: 'update',
+          branch: ["request", 'attestation', eventKey, 'meta'],
+          payload: {
+            ...response
+          },
+        })
+      })
+    }).catch(err=>{
+      database.databaseWrite({
+        writeType: 'update',
+        branch: ["request", 'attestation', eventKey, 'error'],
+        payload: {
+          ...err
+        },
+      })
+    })
+  })
+}
+
+const eventGenerate = (eventData, eventKey) => {
+    uportCredentials.attest({
+      sub: '2oo7fQjxR44MnKa8n4XKDZBBa2Buty4qrug',
+      claim: {
+        ...eventData.input
+      }
+    }).then(attestation=>{
+      const url =  `me.uport:add?attestations=${attestation}`
+        database.databaseWrite({
+          writeType: 'update',
+          branch: ['events', eventKey, 'data'],
+          payload: {
+            QR: url
+          },
+        })
+    }).catch(err=>{
+      database.databaseWrite({
+        writeType: 'update',
+        branch: ['events', eventKey, 'error'],
+        payload: {
+          ...err
+        },
+      })
+    })
+}
+
+
+
 
 /*---*---------------              ---------------*---* 
 

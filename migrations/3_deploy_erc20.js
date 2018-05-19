@@ -1,4 +1,4 @@
-const MeetupEvent = artifacts.require('./EIP20.sol');
+const EIP20 = artifacts.require('./EIP20.sol');
 
 const deploy = true
 

@@ -51,7 +51,7 @@ export default props => props.status && !props.data ? null :
           Ξ Balance: <IdentityBalance/>
         </Box>
         <Box>
-          PAK Token: <IdentityToken contractName="PAK" contractAddress="0xdf4fae0cf4109ad7afa39bbddfaa4dc5637dc5ca" />
+          UPRT Token: <IdentityToken contractName="UPRT" contractAddress="0x0be678095e348b4bfda93d50af16b29cd0df3d3e" />
         </Box>
       </Box>
     </Container>

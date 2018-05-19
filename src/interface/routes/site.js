@@ -5,6 +5,7 @@ import SmartContractHeader from 'views/site/header/SmartContracts'
 import SmartContractMain from 'views/site/main/SmartContracts'
 
 import UPortSolutionsMain from 'views/site/main/UPortSolutions'
+import UPortLoginMain from 'views/site/main/UPortLogin'
 import ERC20Main from 'views/site/main/ERC20Components'
 
 import MeetupEventMain from 'views/site/main/MeetupEvent'
@@ -31,6 +32,13 @@ export default [
   {
     path: "/solutions/uport",
     main: UPortSolutionsMain,
+    meta: {
+      exact: true,
+    }
+  },
+  {
+    path: "/solutions/uport/login",
+    main: UPortLoginMain,
     meta: {
       exact: true,
     }

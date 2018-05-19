@@ -1,7 +1,10 @@
 /* ------------------------ External Dependencies ------------------------ */
 const _ =  require('lodash');
 const admin = require('firebase-admin');
-/* ------------------------------- Database --------------------------------- */
+
+/* -------------------------------
+  Database
+--------------------------------- */
 const databaseSearch = ({branch = [], boundaries = {}, order = {} }) => new Promise((resolve, reject) => {
   const dataNew = []
   let pathReference = admin.database().ref(`/${_.join(branch, '/')}`);
@@ -39,9 +42,13 @@ const databaseSearch = ({branch = [], boundaries = {}, order = {} }) => new Prom
   if (boundaries && boundaries.endAt) {
     pathReference = pathReference.endAt(boundaries.endAt)  
   }
-  // ref.equalTo() | https://firebase.google.com/docs/reference/js/firebase.database.ThenableReference#limitToFirst
+  // ref.equalTo() | https://firebase.google.com/docs/reference/js/firebase.database.ThenableReference#equalTo
   if (boundaries && boundaries.equalTo) {
     pathReference = pathReference.equalTo(boundaries.equalTo)  
+  }
+  // ref.equalTo() | https://firebase.google.com/docs/reference/js/firebase.database.ThenableReference#child
+  if (boundaries && boundaries.child) {
+    pathReference = pathReference.child(boundaries.child)  
   }
 
   /*--- Filter Database ---*/
@@ -67,18 +74,18 @@ const databaseSearch = ({branch = [], boundaries = {}, order = {} }) => new Prom
 
 });
 
-const databaseRead = ({entity, branch = [], boundaries = {}, order = {} }) => new Promise((resolve, reject) => {
+const databaseRead = ({branch = [], boundaries = {}, order = {} }) => new Promise((resolve, reject) => {
   const dataNew = []
-  let pathReference = admin.database().ref(`/${entity}/${_.join(branch, '/')}`);
+  let pathReference = admin.database().ref(`/${_.join(branch, '/')}`);
 
   pathReference.once('value', function(snapshot) {
     resolve(snapshot.val())
   });
 
 });
-const databaseReadSingle = ({entity, branch = [], boundaries = {}, order = {} }) => new Promise((resolve, reject) => {
+const databaseReadSingle = ({branch = [], boundaries = {}, order = {} }) => new Promise((resolve, reject) => {
   const dataNew = []
-  let pathReference = admin.database().ref(`/${entity}/${_.join(branch, '/')}`);
+  let pathReference = admin.database().ref(`/${_.join(branch, '/')}`);
   pathReference.once('value', function(snapshot) {
     resolve(snapshot.val())
   });
@@ -95,10 +102,10 @@ const databaseReadSingle = ({entity, branch = [], boundaries = {}, order = {} })
 //  * @desc metadata.config
 //  *  @var writeType - [push, update, set]
 //  */
-function databaseWrite({ entity, branch = [], payload = {}, config = {}, boundaries = {}, order = {} }) {
+function databaseWrite({ branch = [], payload = {}, writeType = 'push', boundaries = {}, order = {} }) {
   // Validate Query
   let pathReference = admin.database().ref(`${_.join(branch, '/')}`);
-  switch(config.writeType) {
+  switch(writeType) {
     case'push': // Push | Create a new database entry.
       try {
         const objectReference = pathReference.push({...payload})
@@ -134,13 +141,14 @@ function databaseWrite({ entity, branch = [], payload = {}, config = {}, boundar
 
 }
 
-/* --------------------------- Utility Functions  --------------------------- */
+/* --------------------------- 
+  Utility Functions 
+--------------------------- */
 const isObject = obj => {
   return Object.prototype.toString(obj) === '[object Object]' ? true : false;
 };
 
 const toArray = snapshot => {
-  console.log(snapshot)
   let arr = [];
   snapshot.forEach(childSnapshot => {
     let val = childSnapshot.val();
@@ -152,24 +160,9 @@ const toArray = snapshot => {
   return arr;
 };
 
-/**
- * @func entityCorrect
- * @desc Confirm the database write contains a valid entity in the application database schema.
- */
-const entityCorrect = (entity) => [
-  'self', 
-  'community', 
-  'organization', 
-  'infrastructure',
-  'mutate',
-  ].filter((entityMatch) => entity === entityMatch ? true : false)
-
-/**
- * @func typeCorrect
- * @desc Confirm the database write contains a valid database write type before attempting a database change.
- */
-const typeCorrect = (type) => ['create', 'update', 'patch'].filter((dataWriteTypeMatch) => type === dataWriteTypeMatch ? true : false)
-
+/* --------------------------- 
+  Module Exports  
+--------------------------- */
 module.exports = {
   databaseRead,
   databaseReadSingle,
