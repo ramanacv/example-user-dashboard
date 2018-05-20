@@ -45,6 +45,8 @@ const QueryLifecycle = lifecycle({
   /*--- Component Update ---*/
   componentDidUpdate(prevProps)
   {
+    console.log(this.props)
+    console.log(this.props.loginChannel)
     if(this.props.loginChannel 
        && this.props.loginChannel.data 
        && this.props.loginChannel.data.JWT) {
