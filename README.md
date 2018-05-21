@@ -70,7 +70,50 @@ The uPort AppManager makes registering a new decentralized application on the bl
 Firebase Project
 https://firebase.google.com
 
-#### Set Environment Variables
+
+#### Create A New Project
+The Firebase platform makes it easy to launch new Web 2.0 applications. Simply create a new project and the neccesary infrastructure will be initialized.
+
+![Create New Project](documentation/assets/images/setup/setup-firebase-project.png)
+
+#### Copy/Paste Project Configuration
+
+![The Firebase Configuration Parameters](documentation/assets/images/setup/setup-firebase-configuration.png)
+
+#### Connect Firebase and BuidlBox Frontend 
+After a new Firebase project has been initialized it's time to copy/paste the project configuration files into the BuidlBox settings.
+
+The default BuidlBox settings are located in `/src/settings/Firebase/index.js` which should be replaced with the newly minted configuration parameters
+![Add Firebase Settings to BuidlBox](documentation/assets/images/setup/setup-firebase-settings-buidlbox.png)
+
+The Firebase Authentication server by default communicates with `localhost` and default project url e.x. `buidlbox-demo.firebaseapp.com` but when it's time to run the project in a production environment the default settings should be changed to reflect specific project requirements.
+
+### Custom Authentication Server
+uPort allows users (self-sovereign identities) to authenticate themselves with Web 2.0 applications using the Ethereum Blockchain. However,to take advantage of these capabilities a custom authentication server is required. Fortunately, the BuidlBox contains an `identity` Cloud Function, which includes Firebase and uPort Authentication services, so developers can quickly setup an authentication service, so uPort Identities can login to a web application.
+
+The `identity` Cloud Function is located in `functions/src/index.js` and is being exported via `exports.identity` object. When the Firebase Cloud Functions are deployed an HTTPS endpoint is created, which is accessed using the `UPortLoginFirebase` component located in `src/assimilation/containers/uport` folder.
+
+#### Authentication Server Snippet
+To properly authenticate a decentralized, self-sovereign identity requires authentication using the `uportCredentials.receive()` function, which is passed the `JWT` or otherwise referred to as the `access_token` when returned from the uPort Mobile Application.
+
+```
+exports.identity = functions.https.onRequest((request,response)=> {
+  cors(request, response, () => {
+    const JWT = request.body.JWT
+    uportCredentials.receive(JWT)
+    .then(profile => {
+      if (profile.name) {
+        admin.auth().updateUser(profile.address, {
+          displayName: profile.name
+        })
+      }
+    ...
+```
+
+Warning: The current setup is meant to provide a simple demonstration. The current iteration could be improved to include more security best practices. For example additional defaults `rules` need to be set in the realtime database, to limit data exposure 
+
+
+### Set Environment Variables
 Each project requires setting envrionment variables i.e. AppName, Address and Private Key to privately issues attestations.
 
 As a developer starting to experiment with decentralized solutions, like the Ethereum Blockchain, you're probably already familiar with cryptography and the use public/private key-pairs in server environments, whether that's validating yourself with a backend server using `ssh` or authenticating to `git` server to push new code.

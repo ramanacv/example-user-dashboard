@@ -75,11 +75,12 @@ const firestore = admin.firestore();
                   Identity Authentication
 
 /*---*---------------              ---------------*---*/
-exports.identity = functions.https.onRequest((request,response)=> {
+exports.identity = functions.https.onRequest((request, response) => {
   cors(request, response, () => {
     const JWT = request.body.JWT
     uportCredentials.receive(JWT)
     .then(profile => {
+      console.log(profile)
       if (profile.name) {
         admin.auth().updateUser(profile.address, {
           displayName: profile.name
@@ -91,17 +92,17 @@ exports.identity = functions.https.onRequest((request,response)=> {
         })
       }
       admin.auth().createCustomToken(profile.address)
-      .then(function(customToken) {
-        response.json(customToken).send()
+      .then((AuthenticationToken) => {
+        response.json(AuthenticationToken).send() // Return the AuthenticationToken to the Application Frontend
         database.databaseWrite({
           writeType: 'update',
-          branch: ["users", profile.address, 'profile'],
+          branch: ['users', profile.address, 'profile'],
           payload: {
             ...profile
           }
         })
       })
-      .catch((error)=>{
+      .catch((error) => {
         response.send(error)
         database.databaseWrite({
           writeType: 'create',
@@ -121,7 +122,7 @@ exports.identity = functions.https.onRequest((request,response)=> {
       response.send(error)
       console.log("Error creating custom token:", error);
     })
-  }) 
+  })
 })
 
 
@@ -202,11 +203,12 @@ const loginGenerate = (eventData, eventKey) => {
   return uportCredentials.createRequest({
     requested: eventData.input.requested,
     notifications: eventData.input.notifications,
-    callbackUrl: `https://us-central1-buidlbox-dev.cloudfunctions.net/identityCallback?uid=${eventKey}`
+    callbackUrl: `https://us-central1-buidlbox-dev.cloudfunctions.net/identityCallback?uid=${eventKey}`,
+    accountType: 'segregated'
   }).then(requestToken => {
     database.databaseWrite({
       writeType: 'update',
-      branch: ["request", 'login', eventKey],
+      branch: ['request', 'login', eventKey],
       payload: {
         data: {
           qr: `me.uport:me?requestToken=${requestToken}`
@@ -215,25 +217,25 @@ const loginGenerate = (eventData, eventKey) => {
           status: 'requested',
           type: 'login'
         }
-      },
+      }
     })
   })
 }
 
 const attestationGenerate = (eventData, eventKey) => {
   return database.databaseSearch({
-    branch: ["users"],
+    branch: ['users'],
     boundaries: {
       child: eventData.meta.uid
-    },
+    }
   }).then(lookup=>{
     uportCredentials.attest({
       sub: lookup[0].address,
       claim: {
         ...eventData.data
       }
-    }).then(attestation=>{
-      const url =  `me.uport:add?attestations=${attestation}`
+    }).then(attestation => {
+      const url = `me.uport:add?attestations=${attestation}`
       uportCredentials.push(lookup[0].pushToken, lookup[0].publicEncKey, {url}).then(response => {
         database.databaseWrite({
           writeType: 'update',
@@ -246,41 +248,40 @@ const attestationGenerate = (eventData, eventKey) => {
     }).catch(err=>{
       database.databaseWrite({
         writeType: 'update',
-        branch: ["request", 'attestation', eventKey, 'error'],
+        branch: ['request', 'attestation', eventKey, 'error'],
         payload: {
           ...err
-        },
+        }
       })
     })
   })
 }
 
 const eventGenerate = (eventData, eventKey) => {
-    uportCredentials.attest({
-      sub: '2oo7fQjxR44MnKa8n4XKDZBBa2Buty4qrug',
-      claim: {
-        ...eventData.input
+  uportCredentials.attest({
+    sub: '2oo7fQjxR44MnKa8n4XKDZBBa2Buty4qrug',
+    claim: {
+      ...eventData.input
+    }
+  }).then(attestation => {
+    const url =  `me.uport:add?attestations=${attestation}`
+    database.databaseWrite({
+      writeType: 'update',
+      branch: ['events', eventKey, 'data'],
+      payload: {
+        QR: url
       }
-    }).then(attestation=>{
-      const url =  `me.uport:add?attestations=${attestation}`
-      database.databaseWrite({
-        writeType: 'update',
-        branch: ['events', eventKey, 'data'],
-        payload: {
-          QR: url
-        }
-      })
-    }).catch(err=>{
-      database.databaseWrite({
-        writeType: 'update',
-        branch: ['events', eventKey, 'error'],
-        payload: {
-          ...err
-        },
-      })
     })
+  }).catch(err=>{
+    database.databaseWrite({
+      writeType: 'update',
+      branch: ['events', eventKey, 'error'],
+      payload: {
+        ...err
+      }
+    })
+  })
 }
-
 
 /*---*---------------              ---------------*---* 
 

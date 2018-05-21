@@ -1,3 +1,13 @@
+/**
+ * uPort Demo Purposes
+ * 
+ * The following uPort settings are simply for testing uPort in the browser environment, without
+ * setting up a server to issue/request credentials.
+ * 
+ * Including the SimpleSigner in the browser environment is INSECURE and should NEVER be done
+ * in a production environment.
+ */
+
 import { SimpleSigner } from 'uport-connect'
 const appName = 'Eidenai'
 const appSettings =  {
