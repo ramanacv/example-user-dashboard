@@ -4,7 +4,7 @@ The BuidlBox is a boilerplate for rapidly prototyping creating Web 2.0 and Web 3
 
 
 
-The boilerplate includes includes ready-to-go components, integrations with popular decentralized solutions (uPort, IPFS, ethers.js, Web3, ShapeShift, 0x) and integrations wi
+The boilerplate includes includes ready-to-go components and integrations with popular decentralized solutions (uPort, IPFS, ethers.js, Web3, ShapeShift, 0x), so developers can quickly launch new decentralized applications, without worrying about the details.
 
 ## Overview
 Core building block include decentralized login using uPort, smart contract compilling/deployment/testing with Truffle and communication with the blockchain via Infura. 
@@ -94,7 +94,7 @@ uPort allows users (self-sovereign identities) to authenticate themselves with W
 The `identity` Cloud Function is located in `functions/src/index.js` and is being exported via `exports.identity` object. When the Firebase Cloud Functions are deployed an HTTPS endpoint is created, which is accessed using the `UPortLoginFirebase` component located in `src/assimilation/containers/uport` folder.
 
 #### Authentication Server Snippet
-To properly authenticate a decentralized, self-sovereign identity requires authentication using the `uportCredentials.receive()` function, which is passed the `JWT` or otherwise referred to as the `access_token` when returned from the uPort Mobile Application.
+To properly authenticate a self-sovereign identity the `uportCredentials.receive()` must be called in the same function generating the browser<=>server authentication token.
 
 ```
 exports.identity = functions.https.onRequest((request,response)=> {
@@ -110,7 +110,44 @@ exports.identity = functions.https.onRequest((request,response)=> {
     ...
 ```
 
-Warning: The current setup is meant to provide a simple demonstration. The current iteration could be improved to include more security best practices. For example additional defaults `rules` need to be set in the realtime database, to limit data exposure 
+Warning: The current setup is meant to provide a simple demonstration. The current Cloud Function could be improved to include better security practices. In addition, defensive programming techniques, like IP adress throttling (Firebase throttles resource consumption in certain circumstances), could be introduced to limit the amount of computational resources a bad actor could consume.
+
+##### A Quick Overview of How It Works
+The `uportCredentials.receive()` is passed a `JWT` variable constant (also called an `access_token`) and if the `JWT` has been properly signed by a self-sovereign identity, the `uportCredentials.receive()` function will resolve the JWT token into the self-sovereign identity profile. Depending on what `credentials` and whether the `notifications` have been requested, the profile will contain varying information on request.
+
+Below is an example of a profile, which has been succesfully authenticated.
+
+```
+{
+'@context': 'http://schema.org',
+  '@type': 'Person',
+  publicKey: '0x047....',
+  publicEncKey: 'xXCMn....',
+  name: 'Kames',
+  avatar: { uri: 'https://ipfs.infura.io/ipfs/QmQQkhCFRRGT2tADE4NmvPeX7VAgfGMSdewKdwcBfjGHu6' },
+  country: 'New York',
+  phone: '4158791469',
+  email: 'info@kameacg.com',
+  pushToken: 'eyJ0eXA....',
+  address: '2oyqAfeJHyRgKuwpt7j2pMAE13nvmbSGUbW',
+  networkAddress: '2oyqAfeJHyRgKuwpt7j2pMAE13nvmbSGUbW'
+}
+```
+
+A persistent parameter returned in all self-sovereign identity request it the `address` parameter, which is actually the account MNID. In the future, the `address` parameter will probably be renamed
+
+The identity profile contains an MNID - a unique identifier specific to the self-sovereign identity. The MNID is the persistent identifier,which can be used to authenticate a Person in any envirnonment.
+
+The MNID is Unique Identifier not easily replicated (theoretically low probabilities of duplication), which is why it can be used to authenticate a self-sovereign identity. However, to reduce the risk of identity theft, it's critical the the `JWT` is authenticated in the same function responsible for creating the session token authenticating the browser and server session. Put simply, do not authenticate 
+
+The MNID is passed to the Firebase 
+
+`admin.auth().createCustomToken(profile.address)`
+
+The MNID is Multi Network Identifier - an encoding scheme for Ethereum Addresses and Network Identifiers. 
+
+For more information please refer to the MNID repo: https://github.com/uport-project/mnid
+
 
 
 ### Set Environment Variables

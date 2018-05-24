@@ -38,6 +38,7 @@ import {
   authLoginSuccess
 } from './actions'
 
+console.log(process.env)
 /* ------------------------------ Saga Stories ------------------------------ */
 /*--- Login ---*/
 function* authLogin() {
@@ -103,7 +104,7 @@ function* loginWithEmailPassword({payload, metadata}) {
 /*--- Login With Phone ---*/
 function* loginWithIdentity({payload, metadata}) {
   try {
-    const tokenIdentity = yield fetch('https://us-central1-buidlbox-dev.cloudfunctions.net/identity',{
+    const tokenIdentity = yield fetch(`https://us-central1-${process.env.REACT_APP_FIREBASE_PROJECT_ID}.cloudfunctions.net/identity`,{
       mode: 'cors',
       headers: new Headers({'content-type': 'application/json'}),
       method: 'post',
