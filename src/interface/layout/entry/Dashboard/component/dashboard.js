@@ -94,7 +94,7 @@ export default  ({
         ? null 
         :<DashboardMainPanelLeft {...main.regions.panelLeft.layout}>
           <PerfectScrollbar>
-          { dashboardRoutes.map(route=> !route.panelLeft ? null : <Route exact path={route.path} component={route.panelLeft} />)}
+          { dashboardRoutes.map(route=> !route.panelLeft ? null : <Route strict path={route.path} component={route.panelLeft} />)}
           </PerfectScrollbar> 
         </DashboardMainPanelLeft>}
       {!zones.mainContent 
@@ -110,7 +110,7 @@ export default  ({
         ? null 
         :<DashboardMainPanelRight {...main.regions.panelRight.layout}>
           <PerfectScrollbar>
-          { dashboardRoutes.map(route=> !route.panelRight ? null : <Route exact path={route.path} component={route.panelRight} />)}
+          { dashboardRoutes.map(route=> !route.panelRight ? null : <Route strict path={route.path} component={route.panelRight} />)}
           </PerfectScrollbar> 
         </DashboardMainPanelRight>}
     </DashboardMain>

@@ -2,6 +2,7 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import { SimpleSigner } from 'uport-connect'
 import mnid, {decode} from 'mnid'
+import firebase from 'firebase'
 /* ------------------------- Internal Dependencies -------------------------- */
 import eventManager from 'assimilation/store/events'
 import uPortConnection, {uPortWeb3} from 'services/uPort';
@@ -17,6 +18,7 @@ import {
   UPORT_INIT_CONTRACT_REQUEST,
   UPORT_SEND_TRANSACTION_REQUEST,
   UPORT_ADD_APP_PARAMETERS_REQUEST,
+  UPORT_VERIFY_AUTH_SERVICE_REQUEST
 } from './actions'
 import {
   uPortGetWeb3Success,
@@ -35,6 +37,8 @@ import {
   uPortSendTransactionFailure,
   uPortAddAppParametersSuccess,
   uPortAddAppParametersFailure,
+  uPortVerifyAuthServiceSuccess,
+  uPortVerifyAuthServiceFailure
 } from './actions'
 /*---*--- Get Web3 ---*---*/
 function* getWeb3({payload, metadata}) {
@@ -198,7 +202,29 @@ function* addAppParameters({payload, metadata}) {
   }
 }
 
-export default function* rxdbRootSaga() {
+/*--- Login With Identity ---*/
+function* verifyAuthService({payload, metadata}) {
+  try {
+    const token = yield firebase.auth().currentUser.getToken();
+    const verifyResponse = yield fetch(`https://us-central1-${process.env.REACT_APP_FIREBASE_PROJECT_ID}.cloudfunctions.net/api/verify`,{
+      mode: 'cors',
+      headers: new Headers({
+        'authorization': `Bearer ${token}`,
+        'content-type': 'application/json'
+      }),
+      method: 'post',
+      body: JSON.stringify({
+        JWT: payload
+      })
+      ,
+    }).then(token=> token.json())
+    console.log(verifyResponse)
+  } catch(err) {
+    console.log(err)
+  }
+}
+
+export default function* uportRootSaga() {
   yield [
    takeEvery(UPORT_GET_WEB3_REQUEST, getWeb3),
    takeEvery(UPORT_GET_PROVIDER_REQUEST, getProvider),
@@ -208,5 +234,6 @@ export default function* rxdbRootSaga() {
    takeEvery(UPORT_INIT_CONTRACT_REQUEST, initContract),
    takeEvery(UPORT_SEND_TRANSACTION_REQUEST, sendTransaction),
    takeEvery(UPORT_ADD_APP_PARAMETERS_REQUEST, addAppParameters),
+   takeEvery(UPORT_VERIFY_AUTH_SERVICE_REQUEST, verifyAuthService),
   ];
 }

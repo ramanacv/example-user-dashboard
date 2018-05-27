@@ -29,6 +29,11 @@ export const UPORT_SEND_TRANSACTION_FAILURE = 'UPORT_SEND_TRANSACTION_FAILURE'
 export const UPORT_ADD_APP_PARAMETERS_REQUEST = 'UPORT_ADD_APP_PARAMETERS_REQUEST'
 export const UPORT_ADD_APP_PARAMETERS_SUCCESS = 'UPORT_ADD_APP_PARAMETERS_SUCCESS'
 export const UPORT_ADD_APP_PARAMETERS_FAILURE = 'UPORT_ADD_APP_PARAMETERS_FAILURE'
+
+export const UPORT_VERIFY_AUTH_SERVICE_REQUEST = 'UPORT_VERIFY_AUTH_SERVICE_REQUEST'
+export const UPORT_VERIFY_AUTH_SERVICE_SUCCESS = 'UPORT_VERIFY_AUTH_SERVICE_SUCCESS'
+export const UPORT_VERIFY_AUTH_SERVICE_FAILURE = 'UPORT_VERIFY_AUTH_SERVICE_FAILURE'
+
 // uPort :: GetWeb3 |  UPORT_GET_WEB3
 export const uPortGetWeb3Request = ({payload = {}, metadata = {}}) => ({
   type: UPORT_GET_WEB3_REQUEST,
@@ -177,6 +182,23 @@ export const uPortAddAppParametersSuccess = ({payload = {}, metadata = {}}) => (
 
 export const uPortAddAppParametersFailure = ({payload = {}, metadata = {}}) => ({
   type: UPORT_ADD_APP_PARAMETERS_FAILURE,
+  payload,
+  metadata
+})
+
+// uPort :: VerifyAuthService | UPORT_VERIFY_AUTH_SERVICE
+export const uPortVerifyAuthServiceRequest = ({payload = {}, metadata = {}}) => ({
+  type: UPORT_VERIFY_AUTH_SERVICE_REQUEST,
+  payload,
+  metadata
+})
+export const uPortVerifyAuthServiceSuccess = ({payload = {}, metadata = {}}) => ({
+  type: UPORT_VERIFY_AUTH_SERVICE_SUCCESS,
+  payload,
+  metadata
+})
+export const uPortVerifyAuthServiceFailure = ({payload = {}, metadata = {}}) => ({
+  type: UPORT_VERIFY_AUTH_SERVICE_FAILURE,
   payload,
   metadata
 })

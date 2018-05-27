@@ -12,6 +12,12 @@ import MeetupEventMain from 'views/site/main/MeetupEvent'
 import PunchTheClockMain from 'views/site/main/PunchTheClock'
 import EthereumNameSystem from 'views/site/main/EthereumNameSystem'
 
+
+
+/* Twitter Verify */
+import VerifyTwitterHeader from 'views/site/header/VerifyTwitter'
+import VerifyTwitterMain from 'views/site/main/VerifyTwitter'
+
 export default [
   {
     path: "/",
@@ -29,6 +35,22 @@ export default [
       exact: true,
     }
   },
+
+  /**
+   * Verify
+   */
+  {
+    path: "/verify/twitter",
+    header: VerifyTwitterHeader,
+    main: VerifyTwitterMain,
+    meta: {
+      exact: true,
+    }
+  },
+
+  /**
+   * uPort
+   */
   {
     path: "/solutions/uport",
     main: UPortSolutionsMain,
@@ -44,7 +66,9 @@ export default [
     }
   },
 
-  // Features
+  /**
+   * Features
+   */
   {
     path: "/features/erc20",
     main: ERC20Main,

@@ -16,6 +16,7 @@ import ERC20Transfer from 'features/ERC20/ERC20Transfer'
 import ERC20Approve from 'features/ERC20/ERC20Approve'
 import ERC20Deploy from 'features/ERC20/ERC20Deploy'
 import AdminUserList from 'features/AdminUserList'
+import { UserProfile } from 'containers'
 /* ------------------------------- Component -------------------------------- */
 export default props =>
 <Box>
@@ -31,6 +32,8 @@ export default props =>
       <Paragraph f={[1]}>
         The boilerplate includes includes ready-to-go components and integrations with popular decentralized solutions (uPort, IPFS, ethers.js, Web3, ShapeShift, 0x), so developers can quickly launch new decentralized applications, without worrying about the details.
       </Paragraph>
+
+      <UserProfile/>
 
       <Flex justify='space-evenly' mt={20} >
         <Box w={[1,1,0.30]} p={10} >

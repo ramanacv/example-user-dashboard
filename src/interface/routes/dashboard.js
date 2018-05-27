@@ -11,6 +11,15 @@ import AdminUserList from 'views/dashboard/main/UserList'
 
 import MeetupEvent from 'features/MeetupEvent'
 
+
+/**
+ * Entity
+ */
+import People from 'views/dashboard/main/People'
+import PeoplePanelLeft from 'views/dashboard/panelLeft/People'
+import PeoplePanelRight from 'views/dashboard/panelRight/People'
+
+
 import {
   Box, 
 } from 'atomic'
@@ -45,6 +54,12 @@ export default [
     path: "/dashboard/contracts",
     main: EthereumContracts,
     panelLeft: MenuSmartContractsWrapper,
+  },
+  {
+    path: "/dashboard/people",
+    main: People,
+    panelLeft: PeoplePanelLeft,
+    panelRight: PeoplePanelRight
   },
   {
     path: "/dashboard/settings",

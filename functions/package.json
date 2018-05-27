@@ -144,8 +144,10 @@
     "firebase-functions": "^0.9.1",
     "jsontokens": "^0.7.7",
     "lodash": "^4.17.4",
+    "mnid": "^0.1.1",
     "spdx-license-ids": "^3.0.0",
-    "uport": "^0.6.2",
+    "twitter": "^1.7.1",
+    "uport": "^0.6.0",
     "url-parse": "^1.2.0",
     "uuid": "^3.2.1"
   }

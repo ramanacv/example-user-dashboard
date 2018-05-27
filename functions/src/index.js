@@ -1,16 +1,33 @@
 /* ------------------------ Node.js Dependencies ------------------------ */
 const URL = require('url-parse');
 /* ------------------------ External Dependencies ------------------------ */
+const cookieParser = require('cookie-parser')()
+const express = require('express')
 const uport = require('uport')
+const mnid = require('mnid')
 const admin = require('firebase-admin')
 const functions = require('firebase-functions')
 const cors = require('cors')({origin: true})
+const Twitter = require('twitter')
 /* ------------------------- Internal Dependencies -------------------------- */
 const database = require('./database')
+const validateFirebaseIdToken = require('./authorization')
+// const TwitterClient = require('./twitter')
 const serviceAccount = require('../secrets/service_account.json')
+
+/* --------------------- Initialization & Configuration --------------------- */
+const app = express()
+app.use(cors)
+app.use(cookieParser)
+app.use(validateFirebaseIdToken)
+
+/* uPort */
 const Credentials = uport.Credentials
 const SimpleSigner = uport.SimpleSigner
 const Contract = uport.Contract
+/* MNID */
+const decode = mnid.decode
+/* Contracts */
 // const ERC20 = require('./contracts/ERC20.json')
 /* ------------------------- Constants -------------------------- */
 /**
@@ -39,6 +56,13 @@ const uportCredentials = new Credentials({
   appName: uportAppName,
   address: uportAppAddress,
   signer: uportSimpleSigner
+})
+
+const TwitterClient = Twitter({
+  consumer_key: 'Vp7mlp4O2scbrR3NLN3NMFWKK',
+  consumer_secret: 'WIZi5eaiWU4uR8rEtxgQlND9MiVncoL1LeVsaNFaEfdHvYwQC0',
+  access_token_key: '77771373-pxhXbgffCKBfxdwakbsADGPallccBxqNzpowR4aRl',
+  access_token_secret: 'UbBeW16bR0jo1QBzgkJgJ6iX4RjyhVVbFWfigqqBbImU4'
 })
 
 /* ------------------------ Initialize Dependencies ------------------------- */
@@ -88,13 +112,18 @@ exports.identity = functions.https.onRequest((request, response) => {
       admin.auth().createCustomToken(profile.address)
       .then((AuthenticationToken) => {
         response.json(AuthenticationToken).send() // Return the AuthenticationToken to the Application Frontend
+        const mnidDecoded = decode(profile.address)
+        // Save Profile in Realtime Database
         database.databaseWrite({
           writeType: 'update',
           branch: ['users', profile.address, 'profile'],
           payload: {
-            ...profile
+            ...profile,
+            addressDecoded: mnidDecoded
           }
         })
+        // Save Profile in Firestore (NoSQL) - Experimental
+        firestore.collection('people').update(profile)
       })
       .catch(error => {
         response.send(error)
@@ -143,6 +172,89 @@ exports.identityCallback = functions.https.onRequest((request, response) => {
     payload: {
       JWT: accessToken
     }
+  })
+})
+
+/**
+ * Identity
+ * @desc Authenticates a uPort decentralized identity
+ * @param {object} request The HTTP request object
+ * @param {object} response The HTTP response object
+ */
+
+app.post('/verify', (req, res) => {
+  console.log(req.body)
+  console.log(req.user)
+  var params = {user_id: req.user.firebase.identities['twitter.com'][0]}
+  TwitterClient.get('users/lookup', params, function (error, user, response) {
+    if (!error) {
+      const twitterProfile = user[0]
+      uportCredentials.receive(req.body.JWT)
+      .then(profile => {
+        uportCredentials.attest({
+          sub: profile.address,
+          claim: {
+            name: twitterProfile.name,
+            screenName: twitterProfile.screen_name,
+            url: twitterProfile.url,
+            followers: twitterProfile.followers_count,
+            friends: twitterProfile.friends_count,
+            verified: twitterProfile.verified
+          }
+        })
+        .then(attestation => {
+          console.log(attestation)
+          const url = `me.uport:add?attestations=${attestation}`
+          uportCredentials.push(profile.pushToken, profile.publicEncKey, {url}).then(response => {
+            database.databaseWrite({
+              writeType: 'push',
+              branch: ['request', 'verification'],
+              payload: {
+                ...response
+              }
+            })
+          })
+        }).catch(err => {
+          database.databaseWrite({
+            writeType: 'update',
+            branch: ['request', 'verifcation', 'error'],
+            payload: {
+              ...err
+            }
+          })
+        })
+      })
+    } else {
+      console.log(error)
+    }
+  })
+
+
+
+
+
+
+
+  database.databaseWrite({
+    writeType: 'push',
+    branch: ['request', 'verify'],
+    payload: {
+      data: req.user,
+      meta: {
+        status: 'verified',
+        category: 'twitter',
+        type: 'verify'
+      }
+    }
+  })
+  res.json({user: req.user}).send()
+})
+
+exports.api = functions.https.onRequest(app)
+
+exports.verify = functions.https.onRequest((request, response) => {
+  cors(request, response, () => {
+    console.log(request.body)
   })
 })
 
@@ -292,9 +404,8 @@ const functionGenerate = (eventData, eventKey) => {
     const contractInstance = Contract(ERC20.abi)
     const contract = contractInstance.at(contractAddress)
     const url = contract.transfer('0xa4e8acb31c42be108c12a7f61343f3688d561625', 5)
-    encodeURIComponent(url)
-    // const url = `me.uport:WPivvsQ?function=${data}`
-    console.log(url)
+    // const url = 'me.uport:WPivvsQ?function=approve(address%20ERC20Approve%2C%20uint256%204)&label=Eidenai&callback_url=https%3A%2F%2Fchasqui.uport.me%2Fapi%2Fv1%2Ftopic%2Fo6OyEDhb6V9McMhh&client_id=2oo7fQjxR44MnKa8n4XKDZBBa2Buty4qrug'
+    // console.log(url)
     uportCredentials.push(lookup[0].pushToken, lookup[0].publicEncKey, {url}).then(response => {
       database.databaseWrite({
         writeType: 'update',

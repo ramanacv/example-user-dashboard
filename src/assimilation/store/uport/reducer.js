@@ -23,6 +23,10 @@ UPORT_SEND_TRANSACTION_FAILURE,
 UPORT_ADD_APP_PARAMETERS_REQUEST,
 UPORT_ADD_APP_PARAMETERS_SUCCESS,
 UPORT_ADD_APP_PARAMETERS_FAILURE,
+UPORT_VERIFY_AUTH_SERVICE_REQUEST,
+UPORT_VERIFY_AUTH_SERVICE_SUCCESS,
+UPORT_VERIFY_AUTH_SERVICE_FAILURE,
+
 } from './actions'
 
 import { initialState } from './selectors'
@@ -260,6 +264,33 @@ export default (state = initialState, {type, payload, metadata}) => {
             error: payload
           }
         }
+      
+      //   case UPORT_VERIFY_AUTH_SERVICE_REQUEST:
+      //   return {
+      //     ...state,
+      //     [metadata.delta]: {
+      //       ...state[metadata.delta],
+      //       status: undefined
+      //     }
+      //   }
+      // case UPORT_VERIFY_AUTH_SERVICE_SUCCESS:
+      //   return {
+      //     ...state,
+      //     [metadata.delta]: {
+      //       ...state[metadata.delta],
+      //       status: true,
+      //       data: payload
+      //     }
+      //   }
+      // case UPORT_VERIFY_AUTH_SERVICE_FAILURE:
+      //   return {
+      //     ...state,
+      //     [metadata.delta]: {
+      //       ...state[metadata.delta],
+      //       status: false,
+      //       error: payload
+      //     }
+      //   }
 
 
     default:

@@ -5,7 +5,7 @@ import React from 'react';
 import { compose, lifecycle, withProps, withState, withHandlers, renderComponent } from 'recompose'
 import { connect } from 'react-redux'
 import {
-  Flex, Box, 
+  Flex, Box,
   Heading, Image, Paragraph, Link, Span, Button,
   BackgroundImage, BackgroundGradient
 } from 'atomic'
@@ -68,9 +68,11 @@ const ComponentRender = props => <div>
             src={idx(props, _=>_.data[item].profile.avatar.uri)}
           />
         </Box>
-          <Heading f={[3]}  >
+        <Link to={`/dashboard/people/${props.data[item].profile.address}`}>
+          <Heading f={[3]}>
             {props.data[item].profile.name}
           </Heading>
+          </Link>
         </Flex>
         <Flex w={[1,0.6]} justify='space-evenly' >
           <Span>{props.data[item].profile.email}</Span>

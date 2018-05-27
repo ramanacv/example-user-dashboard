@@ -12,6 +12,11 @@ export default [
   svg: svg.commerceOnlineBanking,
 },
 {
+  title: 'People',
+  to: '/dashboard/people',
+  svg: svg.dna,
+},
+{
   title: 'Smart Contracts',
   to: '/dashboard/contracts',
   svg: svg.dataMining,

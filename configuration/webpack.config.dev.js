@@ -94,6 +94,7 @@ module.exports = {
       components: path.resolve(__dirname, '../src/interface/components'),
       containers: path.resolve(__dirname, '../src/interface/containers'),
       interface: path.resolve(__dirname, '../src/interface/interface'),
+      entity: path.resolve(__dirname, '../src/interface/entity'),
       features: path.resolve(__dirname, '../src/interface/features'),
       forms: path.resolve(__dirname, '../src/interface/forms'),
       layout: path.resolve(__dirname, '../src/interface/layout'),

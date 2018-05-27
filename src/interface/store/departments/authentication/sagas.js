@@ -38,7 +38,6 @@ import {
   authLoginSuccess
 } from './actions'
 
-console.log(process.env)
 /* ------------------------------ Saga Stories ------------------------------ */
 /*--- Login ---*/
 function* authLogin() {
@@ -80,6 +79,7 @@ function* loginWithAuthorization({payload, metadata}) {
       message: loginWelcome
     }}))
   } catch(e) {
+    console.log(e)
     yield put({type: AUTH_LOGIN_WITH_AUTHORIZATION_FAILURE, payload: e.message })
     yield put({type: AUTH_LOGIN_FAILURE, payload: e.message })
     yield put(notificationOpen({payload:{
@@ -101,7 +101,7 @@ function* loginWithEmailPassword({payload, metadata}) {
   }
 }
 
-/*--- Login With Phone ---*/
+/*--- Login With Identity ---*/
 function* loginWithIdentity({payload, metadata}) {
   try {
     const tokenIdentity = yield fetch(`https://us-central1-${process.env.REACT_APP_FIREBASE_PROJECT_ID}.cloudfunctions.net/identity`,{
@@ -120,6 +120,7 @@ function* loginWithIdentity({payload, metadata}) {
     console.log(err)
   }
 }
+
 /*--- Login With Phone ---*/
 function* loginWithPhone({payload, metadata}) {
   const { phoneNumber } = payload

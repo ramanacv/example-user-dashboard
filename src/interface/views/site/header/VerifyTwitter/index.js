@@ -10,10 +10,10 @@ export default props =>
 <Section {...props} px={[20,40]}color='white' pos='relative' >
     <Flex direction={['column']}  mh={['20vh']} align='center' justify={['center']} >
       <Heading f={[5,6]}>
-        Verify Email
+        Verify Twitter
       </Heading>
       <Heading f={[3]}>
-        Trust Manager
+        Self-Sovereign Digital Identity
       </Heading>
     </Flex>
 </Section>

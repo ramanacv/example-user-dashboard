@@ -13,36 +13,29 @@ The BuidlBox boilerplate also provides core building blocks like Redux, Routing,
 
 TL;DR: Rapid protoping of decentralized applications using mesh solutions.
 
-## How To Get Involved
-It's encouraged to format the BuidlBox issues adhering to our submission guidelines. A primary objective of the BuidlBox is to encourage collaboration and input from the uPort/Ethereum growing community. We want this to be your project. If you see an opportunity. Great! Create a public issue, uPort will fund the bounty and together we'll Open Source The World.
-
-- User Story
-- Background
-- Acceptance Criteria
-- Technical Details
-
 ![BuidlBox Preview](documentation/assets/images/buidl-preview.png)
 ### Install
 
 ```
-$ npm install -g truffle
-
 -------- Step 1 --------
 git clone git@github.com:uport-project/buidlbox.git ; cd buidlbox
 
 -------- Step 2 --------
 npm install || yarn
 
-------- Step 2.5 (Optional) -------
-npm install -g truffle // Smart Contract Management
-
-------- Step 3 (Optional) -------
+-------- Step 3 --------
 npm run build || yarn build => development
 npm run start || yarn start => production
+
+
+--- Developer Tools ---
+$ npm install -g truffle
 ```
 
-### Web 2.0 and Web 3.0 Capabilities
-The BuidlBox is built to utilize both Web 2.0 and Web 3.0 capabilities. For the time being, decentralized solutions haven't reached full maturity, which means we still have to rely on traditional methods of building applications. However, moving forward the BuidlBox will start to migrate as many features as possible to the decentralized web i.e. file storage on IPFS, membership payments using ChronoLogic, distributed computing using WebAssembly, and more.
+### Merging Web 2.0 and Web 3.0
+The BuidlBox is designed to merge Web 2.0 and Web 3.0 capabilities.
+
+For the time being, decentralized solutions haven't reached full maturity, which means we still have to rely on traditional  methods of building applications. However, moving forward the BuidlBox will start to migrate as many features as possible to the decentralized web i.e. file storage on IPFS, membership payments using ChronoLogic, distributed computing using WebAssembly, and more.
 
 
 #### Firebase - The Web 2.0 Platform
@@ -186,3 +179,12 @@ const uportCredentials = new Credentials({
 
 #### Authentication 
 A primary feature of uPort's Decentralized Identity is authentication using the Ethereum Blockchain.
+
+
+## How To Get Involved
+It's encouraged to format the BuidlBox issues adhering to our submission guidelines. A primary objective of the BuidlBox is to encourage collaboration and input from the uPort/Ethereum growing community. We want this to be your project. If you see an opportunity. Great! Create a public issue, uPort will fund the bounty and together we'll Open Source The World.
+
+- User Story
+- Background
+- Acceptance Criteria
+- Technical Details
