@@ -33,7 +33,7 @@ $ npm install -g truffle
 ```
 ### Project File Structure
 The BuidlBox is a production ready boilerplate. During Beta the file structure is liable to change/simplify. However, you can always expect to be able to spin-up the BuidlBox and have a complete Site/Dashboard application ready-to-go. 
-
+```
 ├── assembly - WebAssembly Files
 ├── contracts - Ethereum Smart Contracts
 ├── public
@@ -105,7 +105,7 @@ The BuidlBox is a production ready boilerplate. During Beta the file structure i
 |  ├── logic - Utility Libraries and General Helpers
 |  ├── services - Configuration with Services (Firebase)
 |  └── index.js - Entry point for app
-
+```
 
 ### Merging Web 2.0 and Web 3.0
 The BuidlBox is designed to merge Web 2.0 and Web 3.0 capabilities.
