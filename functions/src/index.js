@@ -1,5 +1,5 @@
 /* ------------------------ Node.js Dependencies ------------------------ */
-const URL = require('url-parse');
+
 /* ------------------------ External Dependencies ------------------------ */
 const cookieParser = require('cookie-parser')()
 const express = require('express')
@@ -9,13 +9,11 @@ const admin = require('firebase-admin')
 const functions = require('firebase-functions')
 const cors = require('cors')({origin: true})
 const octokit = require('@octokit/rest')()
-const Twitter = require('twitter')
 /* ------------------------- Internal Dependencies -------------------------- */
 const database = require('./database')
 const validateFirebaseIdToken = require('./authorization')
-// const TwitterClient = require('./twitter')
+const TwitterClient = require('./twitter')
 const serviceAccount = require('../secrets/service_account.json')
-
 /* --------------------- Initialization & Configuration --------------------- */
 /**
  * Express Server
@@ -34,7 +32,6 @@ const Contract = uport.Contract
 /* MNID */
 const decode = mnid.decode
 
-
 /* ------------------------- Envirnonment Variables -------------------------- */
 const configuration = functions.config()
 
@@ -46,12 +43,6 @@ const databaseURL = configuration.firebase.databaseURL
 const uportAppName = configuration.uport.appname
 const uportAppAddress = configuration.uport.address
 const uportSimpleSignerKey = configuration.uport.simplesigner
-
-// Twitter
-const twitterConsumerKey = configuration.twitter.consumer_key
-const twitterConsumerSecret = configuration.twitter.consumer_secret
-const twitterTokenKey = configuration.twitter.token_key
-const twitterTokenSecret = configuration.twitter.token_secret
 
 // Github
 const githubPublicKey = configuration.github.public_key
@@ -69,38 +60,21 @@ const uportCredentials = new Credentials({
   signer: uportSimpleSigner
 })
 
-/**
- * Client | Twitter
- * @desc Initialize the Twitter Client object to communicate with the Twitter API
- */
-const TwitterClient = Twitter({
-  consumer_key: twitterConsumerKey,
-  consumer_secret: twitterConsumerSecret,
-  access_token_key: twitterTokenKey,
-  access_token_secret: twitterTokenSecret
-})
-
 /* ------------------------ Initialize Dependencies ------------------------- */
-/**
- * Firebase - Administrator Initialization
- */
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: databaseURL
 })
-const firestore = admin.firestore()
 
-/*---*---------------              ---------------*---* 
+// Uncomment to enable to Firestore read/write features
+// admin.firestore()
 
-                  Identity Authentication
-
-/*---*---------------              ---------------*---*/
-
+/* ------------------------ Firebase Cloud Functions ------------------------ */
 /**
  * VerifyGithub
  * @param {object} request The HTTP request object
  * @param {object} response The HTTP response object
- * TODO(@kamescg) The current authentiction doesn't work. Need to figure out why!?
+ * TODO(@kamescg) The current authentiction doesn't work. Need to figure out why
  */
 const verifyGithub = (req, res) => {
   res.json({user: req.user}).send()
@@ -227,7 +201,7 @@ app.post('/verify', (req, res) => {
     case 'twitter.com':
       verifyTwitter(req, res)
       break
-      case 'github.com':
+    case 'github.com':
       verifyGithub(req, res)
       break
     default:
@@ -241,7 +215,6 @@ exports.verify = functions.https.onRequest((request, response) => {
     console.log(request.body)
   })
 })
-
 
 /**
  * VerifyTwitter
@@ -292,7 +265,6 @@ const verifyTwitter = (req, res) => {
       console.log(error)
     }
   })
-  
   database.databaseWrite({
     writeType: 'push',
     branch: ['request', 'verify'],
@@ -308,22 +280,15 @@ const verifyTwitter = (req, res) => {
   res.json({user: req.user}).send()
 }
 
-/*---*---------------              ---------------*---* 
-
-                    Database Requests
-
-/*---*---------------              ---------------*---*/
-
+/* --------------------------- Database Requests ---------------------------- */
 /**
  * Manage Attestation Requests
  * TODO(@kamescg): Better Attestation Verification database naming structure.
- * 
- * Currently the '/request/attestation/' path is montired for database changes.
+ * Currently the '/request/attestation/' path is monitored for database changes.
  * This is just a starting point and MVP for data streaming between frontend/backend
- *  
  * The process needs to be more thoroughly thought about to fully understand how we
  * can enable as many verifiatons systems to "hook" into our private verification attestation
- * framework/boilerplate. 
+ * framework/boilerplate.
  */
 
 exports.request = functions.database.ref('/request/{type}/{request}')
@@ -438,8 +403,8 @@ const attestationGenerate = (eventData, eventKey) => {
  * @desc Generates a uPort login request using the createRequest method
  * @param {object} eventData The data saved in the Firebase realtime database.
  * @param {string} eventKey The key referencing the new realtime database entry.
- * 
- * me.uport:WPivvsQ?function=approve(address%20ERC20Approve%2C%20uint256%204)&label=Eidenai&callback_url=https%3A%2F%2Fchasqui.uport.me%2Fapi%2Fv1%2Ftopic%2Fo6OyEDhb6V9McMhh&client_id=2oo7fQjxR44MnKa8n4XKDZBBa2Buty4qrug
+ * TODO(@kamescg) This is currently broken and will be fixed with upcoming uPort library changes.
+ * Presently it's just a mockup for the future cloud function i.e. not production ready.
  */
 const functionGenerate = (eventData, eventKey) => {
   return database.databaseSearch({
@@ -453,8 +418,6 @@ const functionGenerate = (eventData, eventKey) => {
     const contractInstance = Contract(ERC20.abi)
     const contract = contractInstance.at(contractAddress)
     const url = contract.transfer('0xa4e8acb31c42be108c12a7f61343f3688d561625', 5)
-    // const url = 'me.uport:WPivvsQ?function=approve(address%20ERC20Approve%2C%20uint256%204)&label=Eidenai&callback_url=https%3A%2F%2Fchasqui.uport.me%2Fapi%2Fv1%2Ftopic%2Fo6OyEDhb6V9McMhh&client_id=2oo7fQjxR44MnKa8n4XKDZBBa2Buty4qrug'
-    // console.log(url)
     uportCredentials.push(lookup[0].pushToken, lookup[0].publicEncKey, {url}).then(response => {
       database.databaseWrite({
         writeType: 'update',
@@ -493,11 +456,7 @@ const eventGenerate = (eventData, eventKey) => {
   })
 }
 
-/*---*---------------              ---------------*---* 
-
-                      Authentication 
-
-/*---*---------------              ---------------*---*/
+/* ----------------------------- Authentication ----------------------------- */
 exports.authenticationComplete = functions.auth.user().onCreate(event => {
   const providerAccountType = {
     'google.com': 'google',
@@ -521,8 +480,16 @@ exports.authenticationComplete = functions.auth.user().onCreate(event => {
     },
     provider: event.data.providerData
   }
-  firestore.collection('people').add(person)
+  // Enable if using the Firestore
+  // firestore.collection('people').add(person)
 })
+
+/* ----------------------------- Smart Contracts ---------------------------- */
+/**
+ * TODO(@kamescg) The build process wasn't properling including JSON files.
+ * Therefore the smart contract was copied/pasted directly for testing...
+ * Moving forward the JSON import issue needs to be fixed.
+ */
 
 const ERC20 = {
   "contractName": "EIP20",
