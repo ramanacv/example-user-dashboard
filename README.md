@@ -4,7 +4,7 @@ The BuidlBox is a boilerplate for rapidly prototyping creating Web 2.0 and Web 3
 
 The boilerplate includes includes ready-to-go components and integrations with popular decentralized solutions (uPort, IPFS, ethers.js, Web3, ShapeShift, 0x), so developers can quickly launch new decentralized applications, without worrying about the details.
 
-WARNING: The Boilerplate is still in Beta - requires more documentation and cleanup!
+⚠️ WARNING ⚠️ The Boilerplate is still in Beta - requires additional documentation and cleanup.
 
 ## Overview
 Core building block include decentralized login using uPort, smart contract compilling/deployment/testing with Truffle and communication with the blockchain via Infura. 
@@ -31,6 +31,81 @@ npm run start || yarn start => production
 --- Developer Tools ---
 $ npm install -g truffle
 ```
+### Project File Structure
+The BuidlBox is a production ready boilerplate. During Beta the file structure is liable to change/simplify. However, you can always expect to be able to spin-up the BuidlBox and have a complete Site/Dashboard application ready-to-go. 
+
+├── assembly - WebAssembly Files
+├── contracts - Ethereum Smart Contracts
+├── public
+|  ├── favicon.ico
+|  ├── index.html - Application Entry
+|  ├── manifest.json - Progressive Web Application
+├── functions - Firebase Cloud Functions
+|  ├── benchmark - Tests
+|  ├── secrets - Add Project Specific Secrets
+|  ├── src - Cloud Functions
+|  |  ├── authorization - HTTPS Authorization
+|  |  ├── contracts - Ethereum Smart Contracts
+|  |  ├── database - Firebase Database
+|  |  ├── twitter - Twitter API Client
+├── src
+|  ├── assets - Media Assets (images, svg, etc...) 
+|  ├── assimilation - Blockchain Redux-related
+|  |  ├── components - Stateless Blockchain Components 
+|  |  ├── containers - Stateful Blockchain Components
+|  |  ├── store - Redux Store
+|  |  |  ├── [department] - Single Blockchain Module
+|  |  |  |  ├── tests - unit tests
+|  |  |  |  ├── actions.js - Action creators / plain objects
+|  |  |  |  ├── reducers.js - Pure functions / immutable.js
+|  |  |  |  ├── sagas.js - Asynchronous side-effects
+|  |  |  |  ├── selectors.js - State selectors / reselect.js
+|  |  |  |  ├── types.js - Action types / string constants
+|  |  |  |  └── utils.js - Module-specific helpers
+|  |  |  └── actions.js - Actions combiner
+|  |  |  └── actionsAuto.js - Streamlined Actions combiner
+|  |  |  └── middlewares.js - Redux Middleware Combiner
+|  |  |  └── sagas.js - Saga combiner
+|  |  |  └── selectors.js - Saga combiner
+|  |  |  └── utils.js - Redux Store Utilities
+|  |  ├── libs - Framework-agnostic libraries
+|  |  ├── utils - Common utility helper functions
+|  |  ├── store.js - Redux reducer and middleware injector
+|  ├── contracts - Ethereum Smart Contracts)
+|  ├── interface - Primary Component Library 
+|  |  ├── components - General Stateless Components 
+|  |  ├── containers - General Stateful Components
+|  |  ├── entity - Entity Components (Person, Organization, Project, etc...)
+|  |  ├── features - Specific Stateless/Stateful Components
+|  |  ├── foundry - Dialog/Portal Components  
+|  |  ├── forms - Redux Form Components
+|  |  ├── layout - Site/Dashboard Layout
+|  |  ├── routes - Redux Routing
+|  |  |  └── dashboard
+|  |  |  └── entry
+|  |  |  └── dashboard.js
+|  |  |  └── index.js
+|  |  |  └── site.js
+|  |  ├── store - Default Redux Store
+|  |  |  └── configuration
+|  |  |  └── store
+|  |  |  ├── [department] - Single Blockchain Module
+|  |  |  |  ├── tests - Jest unit tests
+|  |  |  |  ├── actions.js - Action creators / plain objects
+|  |  |  |  ├── reducers.js - Pure functions / immutable.js
+|  |  |  |  ├── sagas.js - Asynchronous side-effects
+|  |  |  |  ├── selectors.js - State selectors / reselect.js
+|  |  |  |  ├── types.js - Action types / string constants
+|  |  |  |  └── utils.js - Module-specific helpers
+|  |  ├── theme - Style Settings
+|  |  |  └── inject - Add CSS from Third-Party Modules
+|  |  |  └── settigns - Color, Gradients, Tex Shadow, etc...
+|  |  |  └── stylesheet - CSS 
+|  |  ├── views - Pages & Complex Componets
+|  ├── logic - Utility Libraries and General Helpers
+|  ├── services - Configuration with Services (Firebase)
+|  └── index.js - Entry point for app
+
 
 ### Merging Web 2.0 and Web 3.0
 The BuidlBox is designed to merge Web 2.0 and Web 3.0 capabilities.
@@ -45,8 +120,8 @@ The BuidlBox includes a Firebase backend to simplify deployment of Web 2.0 and W
 1. Register a Web 3.0 decentralized application on uPort
 2. Create a new Web 2.0 project on Firebase.
 
-uPort Application Manager
-http://appmanager.uport.me
+#### uPort Application Manager
+https://appmanager.uport.me
 
 The AppManager provides an easy-to-use interface for developers to quickly register decentralized applications on the Ethereum Blockchain.
 
