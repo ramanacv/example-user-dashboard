@@ -107,14 +107,10 @@ function*  dbChannel({payload, metadata}) {
   try {
     const { branch, writeType } = metadata
     const channel = yield call(reduxSagaFirebase.database.channel, `/${branch.join("/")}`);
-    console.log(channel)
-    console.log('starated')
     while(true) {
-      const { value: todos } = yield take(channel);
-      console.log(todos)
-      yield put(databaseChannelSuccess({payload: todos, metadata}))
+      const { value: data } = yield take(channel);
+      yield put(databaseChannelSuccess({payload: data, metadata}))
     }
-    yield put(databaseChannelSuccess({payload: channel, metadata}))
   } catch(e) {
     yield put(databaseChannelFailure({payload: e, metadata}))
   }

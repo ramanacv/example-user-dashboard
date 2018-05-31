@@ -8,6 +8,7 @@ const mnid = require('mnid')
 const admin = require('firebase-admin')
 const functions = require('firebase-functions')
 const cors = require('cors')({origin: true})
+const octokit = require('@octokit/rest')()
 const Twitter = require('twitter')
 /* ------------------------- Internal Dependencies -------------------------- */
 const database = require('./database')
@@ -16,6 +17,10 @@ const validateFirebaseIdToken = require('./authorization')
 const serviceAccount = require('../secrets/service_account.json')
 
 /* --------------------- Initialization & Configuration --------------------- */
+/**
+ * Express Server
+ * @desc Initialize an express server.
+ */
 const app = express()
 app.use(cors)
 app.use(cookieParser)
@@ -25,31 +30,37 @@ app.use(validateFirebaseIdToken)
 const Credentials = uport.Credentials
 const SimpleSigner = uport.SimpleSigner
 const Contract = uport.Contract
+
 /* MNID */
 const decode = mnid.decode
-/* Contracts */
-// const ERC20 = require('./contracts/ERC20.json')
-/* ------------------------- Constants -------------------------- */
-/**
- * Configuration
- * @param configuration
- * uPort
- * @param uportAppName
- * @param uportAppAddress
- * @param uportAppSimpleSigner
- * Firebase
- * @param projectId
- * @param databaseURL
- */
+
+
+/* ------------------------- Envirnonment Variables -------------------------- */
 const configuration = functions.config()
-const uportAppName = configuration.uport.appname
-const uportAppAddress = configuration.uport.address
-const uportSimpleSignerKey = configuration.uport.simplesigner
+
+// Firebase
 const projectId = configuration.firebase.projectId
 const databaseURL = configuration.firebase.databaseURL
 
+// uPort
+const uportAppName = configuration.uport.appname
+const uportAppAddress = configuration.uport.address
+const uportSimpleSignerKey = configuration.uport.simplesigner
+
+// Twitter
+const twitterConsumerKey = configuration.twitter.consumer_key
+const twitterConsumerSecret = configuration.twitter.consumer_secret
+const twitterTokenKey = configuration.twitter.token_key
+const twitterTokenSecret = configuration.twitter.token_secret
+
+// Github
+const githubPublicKey = configuration.github.public_key
+const githubSecretKey = configuration.github.private_key
+
 /**
- * uPort | Credentials
+ * Credentials | uPort
+ * @desc Initialize the uPort Credentials object to
+ * request credentials and generate private attestations.
  */
 const uportSimpleSigner = SimpleSigner(uportSimpleSignerKey)
 const uportCredentials = new Credentials({
@@ -58,11 +69,15 @@ const uportCredentials = new Credentials({
   signer: uportSimpleSigner
 })
 
+/**
+ * Client | Twitter
+ * @desc Initialize the Twitter Client object to communicate with the Twitter API
+ */
 const TwitterClient = Twitter({
-  consumer_key: 'Vp7mlp4O2scbrR3NLN3NMFWKK',
-  consumer_secret: 'WIZi5eaiWU4uR8rEtxgQlND9MiVncoL1LeVsaNFaEfdHvYwQC0',
-  access_token_key: '77771373-pxhXbgffCKBfxdwakbsADGPallccBxqNzpowR4aRl',
-  access_token_secret: 'UbBeW16bR0jo1QBzgkJgJ6iX4RjyhVVbFWfigqqBbImU4'
+  consumer_key: twitterConsumerKey,
+  consumer_secret: twitterConsumerSecret,
+  access_token_key: twitterTokenKey,
+  access_token_secret: twitterTokenSecret
 })
 
 /* ------------------------ Initialize Dependencies ------------------------- */
@@ -80,6 +95,26 @@ const firestore = admin.firestore()
                   Identity Authentication
 
 /*---*---------------              ---------------*---*/
+
+/**
+ * VerifyGithub
+ * @param {object} request The HTTP request object
+ * @param {object} response The HTTP response object
+ * TODO(@kamescg) The current authentiction doesn't work. Need to figure out why!?
+ */
+const verifyGithub = (req, res) => {
+  res.json({user: req.user}).send()
+  octokit.authenticate({
+    type: 'oauth',
+    key: githubPublicKey,
+    secret: githubSecretKey
+  })
+
+  octokit.users.checkFollowing({username: 'KamesCG'}).then(result => {
+    console.log(result)
+  })
+}
+
 /**
  * Identity
  * @desc Authenticates a uPort decentralized identity
@@ -123,7 +158,8 @@ exports.identity = functions.https.onRequest((request, response) => {
           }
         })
         // Save Profile in Firestore (NoSQL) - Experimental
-        firestore.collection('people').update(profile)
+        // TODO(@kamescg) Add Firestore Redux Saga to React Frontend
+        // firestore.collection('people').update(profile)
       })
       .catch(error => {
         response.send(error)
@@ -185,6 +221,34 @@ exports.identityCallback = functions.https.onRequest((request, response) => {
 app.post('/verify', (req, res) => {
   console.log(req.body)
   console.log(req.user)
+  const provider = req.user.firebase.sign_in_provider
+  console.log(provider)
+  switch (provider) {
+    case 'twitter.com':
+      verifyTwitter(req, res)
+      break
+      case 'github.com':
+      verifyGithub(req, res)
+      break
+    default:
+      break
+  }
+})
+
+exports.api = functions.https.onRequest(app)
+exports.verify = functions.https.onRequest((request, response) => {
+  cors(request, response, () => {
+    console.log(request.body)
+  })
+})
+
+
+/**
+ * VerifyTwitter
+ * @param {object} req 
+ * @param {object} res 
+ */
+const verifyTwitter = (req, res) => {
   var params = {user_id: req.user.firebase.identities['twitter.com'][0]}
   TwitterClient.get('users/lookup', params, function (error, user, response) {
     if (!error) {
@@ -228,13 +292,7 @@ app.post('/verify', (req, res) => {
       console.log(error)
     }
   })
-
-
-
-
-
-
-
+  
   database.databaseWrite({
     writeType: 'push',
     branch: ['request', 'verify'],
@@ -248,15 +306,7 @@ app.post('/verify', (req, res) => {
     }
   })
   res.json({user: req.user}).send()
-})
-
-exports.api = functions.https.onRequest(app)
-
-exports.verify = functions.https.onRequest((request, response) => {
-  cors(request, response, () => {
-    console.log(request.body)
-  })
-})
+}
 
 /*---*---------------              ---------------*---* 
 
@@ -326,7 +376,6 @@ const loginGenerate = (eventData, eventKey) => {
   return uportCredentials.createRequest({
     requested: eventData.input.requested,
     notifications: eventData.input.notifications,
-    // callbackUrl: `https://us-central1-buidlbox-dev.cloudfunctions.net/identityCallback?uid=${eventKey}`,
     callbackUrl: `https://us-central1-${projectId}.cloudfunctions.net/identityCallback?uid=${eventKey}`
   }).then(requestToken => {
     database.databaseWrite({

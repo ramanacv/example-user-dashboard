@@ -3,8 +3,7 @@ import React from 'react';
 import { compose, lifecycle, } from 'recompose'
 import { connect } from 'react-redux'
 import {
-  Flex, Box, 
-  Heading, Image, Paragraph, Link, Span, Button,
+  Flex, Span
 } from 'atomic'
 
 import { 
@@ -16,14 +15,13 @@ import { fromDatabase } from 'store/departments/selectors'
 const queryLifecycle = lifecycle({
   /*--- Component Mount ---*/
   componentDidMount() {
-    console.log(this.props)
     const eid = this.props.match.params.eid
     this.props.databaseReadRequest(eid)
   },
 
   /*--- Component Update ---*/
   componentDidUpdate(prevProps) {
-    console.log(this.props)
+
   }
 })
 
@@ -45,7 +43,6 @@ const mapDispatchToProps = (dispatch, props) => {
 
 const ComponentRender = props => !props.data ? null :
 <Flex direction="column" boxShadow={0} bg='grayLight' color='charcoal' {...props.styled}  >
-  {console.log(props)}
   <Span>{props.data.profile.email}</Span>
   <Span>{props.data.profile.phone}</Span>
   <Span>{props.data.profile.country}</Span>

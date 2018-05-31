@@ -2,9 +2,9 @@
 
 The BuidlBox is a boilerplate for rapidly prototyping creating Web 2.0 and Web 3.0 applications.
 
-
-
 The boilerplate includes includes ready-to-go components and integrations with popular decentralized solutions (uPort, IPFS, ethers.js, Web3, ShapeShift, 0x), so developers can quickly launch new decentralized applications, without worrying about the details.
+
+WARNING: The Boilerplate is still in Beta - requires more documentation and cleanup!
 
 ## Overview
 Core building block include decentralized login using uPort, smart contract compilling/deployment/testing with Truffle and communication with the blockchain via Infura. 

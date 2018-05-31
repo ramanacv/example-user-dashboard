@@ -27,18 +27,6 @@ const Component = props =>
     <Paragraph f={[1]}>
       uPort returns ownership of identity to the individual. uPort's open identity system allows users to register their own identity on Ethereum, send and request credentials, sign transactions, and securely manage keys & data. Take a look at what we’re building:
     </Paragraph>
-    {/* <Flex justify="space-between" my={15} >
-      <a href="https://itunes.apple.com/us/app/uport-id/id1123434510?mt=8" target="_blank" >
-        <Button>
-          App Store
-        </Button>
-      </a>
-      <a href="https://play.google.com/store/apps/details?id=com.uportMobile&hl=en" target="_blank" >
-        <Button>
-          Play Store
-        </Button>
-      </a>
-    </Flex> */}
     <Paragraph f={[1]}>
       Start integrating uPort into your dApp today. Our docs include tutorials to help you get up and running in minutes!
     </Paragraph>

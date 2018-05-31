@@ -31,7 +31,6 @@ function* uploadFile({payload, metadata}) {
     yield put(storageUploadFileSuccess({payload: {fileID} , metadata}))
     yield put(notificationOpen({payload:{title: 'Storage Upload Success'}}))
   } catch(e) {
-    console.log(e)
     yield put(storageUploadFileFailure({payload: e, metadata}))
     yield put(notificationOpen({payload:{title: 'Storage Upload Failure'}}))
   }

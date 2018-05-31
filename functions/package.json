@@ -133,6 +133,7 @@
   },
   "dependencies": {
     "@google-cloud/firestore": "^0.8.2",
+    "@octokit/rest": "^15.8.0",
     "async": "^2.6.0",
     "base64url": "^2.0.0",
     "body-parser": "^1.17.2",
@@ -142,6 +143,7 @@
     "express": "^4.15.4",
     "firebase-admin": "^5.10.0",
     "firebase-functions": "^0.9.1",
+    "github-base": "^0.5.4",
     "jsontokens": "^0.7.7",
     "lodash": "^4.17.4",
     "mnid": "^0.1.1",

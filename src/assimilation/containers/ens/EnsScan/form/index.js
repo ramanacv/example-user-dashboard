@@ -33,7 +33,6 @@ export default ({ handleSubmit, isSubmitting, styled, ...props}) =>
     </Paragraph>
     <Box h={100} ofy='scroll' >
 
-    {console.log(props)}
     {
     !(props.transactions) ? null :props.transactions.map(i=> 
       <Heading level={[6]} f={[1]} key={i} >

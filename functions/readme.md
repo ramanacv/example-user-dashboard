@@ -12,5 +12,5 @@ firebase functions:config:set uport.appname=APPNAME uport.simplesigner=SIMPLESIG
 
 ### Twitter
 ```
-firebase functions:config:set uport.consumer_key= uport.consumer_secret= 
+firebase functions:config:set twitter.consumer_key= twitter.consumer_secret= 
 ``` 

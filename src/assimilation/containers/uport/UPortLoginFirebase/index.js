@@ -1,31 +1,20 @@
 /* ------------------------- External Dependencies -------------------------- */
 import idx from './idx'
 import React from 'react';
-import {
-  compose,
-  lifecycle,
-  withState
-} from 'recompose'
+import {compose, lifecycle, withState} from 'recompose'
 import { connect } from 'react-redux'
-import { reduxForm } from 'redux-form'
 /* ------------------------- Internal Dependencies -------------------------- */
 import Component from './component'
-/*--- Redux Store ---*/
-// Assimilation
 import { fromUport } from 'assimilation/store/selectors'
-// Store
-import { fromAuthentication, fromDatabase } from 'store/departments/selectors'
-import { uPortGetAttestCredentialsRequest } from 'assimilation/store/actions'
+import { fromDatabase } from 'store/departments/selectors'
 import { 
   authLoginWithIdentity,
   authLogout,
   dialogOpen,
   dialogClose,
 } from 'store/departments/actions'
-// Database
 import { 
   databaseWriteRequest,
-  databaseReadRequest,
   databaseChannelRequest,
 } from 'store/departments/actions'
 /* --------------------------- Component Entry ------------------------------ */
@@ -34,19 +23,11 @@ const DialogState = withState(
   'dialogInitializedToggle',
   false
 )
+
 /*---*--- Lifecylce Methods ---*---*/
 const QueryLifecycle = lifecycle({
-  /*--- Component Mount ---*/
-  componentDidMount()
-  {
-
-  },
-
-  /*--- Component Update ---*/
   componentDidUpdate(prevProps)
   {
-    console.log(this.props)
-    console.log(this.props.loginChannel)
     if(this.props.loginChannel 
        && this.props.loginChannel.data 
        && this.props.loginChannel.data.JWT) {
@@ -76,6 +57,13 @@ const mapStateToProps = (state, props) => ({
 )
 
 const mapDispatchToProps = (dispatch, props) => ({
+  // Authentiction
+  identityLogin: (accessToken) => dispatch(authLoginWithIdentity({
+    payload: accessToken
+  })),
+  logout: () => dispatch(authLogout()),
+
+  // Dialog
   dialogClose: () => dispatch(dialogClose()),
   dialogOpen: (QR) => dispatch(dialogOpen({
     payload:{
@@ -83,10 +71,8 @@ const mapDispatchToProps = (dispatch, props) => ({
       QR: QR
     }
   })),
-  logout: () => dispatch(authLogout()),
-  identityLogin: (accessToken) => dispatch(authLoginWithIdentity({
-    payload: accessToken
-  })),
+
+  // Login 
   loginRequest: ()=>dispatch(databaseWriteRequest({
     payload: {
       input: {
@@ -98,12 +84,14 @@ const mapDispatchToProps = (dispatch, props) => ({
         status: 'initialized',
       }
     },
-    metadata:{
+    metadata: {
       branch: ['request', 'login'],
       delta: 'write|login|request',
       writeType: 'create',
     }
   })),
+
+  // Channel : Database
   requestChannel: (eid) =>dispatch(databaseChannelRequest({
     payload: {},
     metadata: {
