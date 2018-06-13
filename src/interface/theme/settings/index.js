@@ -15,6 +15,7 @@ const theme = {
   ],
   colors: { // Colors : Deprecated
     blue:'#0e0338',
+    blueAlge: '#09272a',
     charcoal: '#4a4a4a',
     grayLight: '#f6f6f6',
     gray: '#9E9E9E',
@@ -39,7 +40,7 @@ const theme = {
     greenLush: ['#56ab2f', '#a8e063'],
     greenDeep: ['#414d0b', '#727a17'],
     gray: ['#e7dfdf', '#f3f8fa'],
-    purple: ['#412468', '#5d3592'],
+    purple: ['#4E3DF5', '#6832A2'],
     white: ['#065dad','#2583b0'],
   },
   textShadows: {

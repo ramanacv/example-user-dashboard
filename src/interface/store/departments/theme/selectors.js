@@ -38,8 +38,7 @@ aside: {
     size: 'normal',
   },
   layout: {
-    bg: 'grayBlue',
-    gradient: 'blue',
+    bg: 'blueAlge',
     color: ['white'],
     mt: 0,
     w: ASIDE_WIDTH_NORMAL,

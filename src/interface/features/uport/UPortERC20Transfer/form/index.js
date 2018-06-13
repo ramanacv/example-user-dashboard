@@ -14,7 +14,7 @@ export default ({ handleSubmit, isSubmitting, styled, ...props}) => (
   <Box mt={10} >
     <Button type="submit" onClick={handleSubmit} gradient='cherry'w={1} >
       {
-        props.identityStatus ? "Send Transaction Request" : 'Generate QR Code'
+        props.uid ? "Request Transaction Request" : 'Generate QR Code'
       }
     </Button>
   </Box>

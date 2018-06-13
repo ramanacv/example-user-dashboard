@@ -26,7 +26,9 @@ module.exports = {
     },
     rinkeby: {
       provider: new HDWalletProvider(mnemonic, 'https://rinkeby.infura.io'),
-      network_id: '4'
+      network_id: '4',
+      gas: 6612388, // Gas limit used for deploys
+      gasPrice: 20000000000, // 20 gwei
     },
     testrpc: {
       network_id: 'default'

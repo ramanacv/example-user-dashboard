@@ -18,11 +18,6 @@ import DashboardMainPanelLeft from 'layout/panels/dashboard/DashboardMainPanelLe
 import DashboardMainPanelRight from 'layout/panels/dashboard/DashboardMainPanelRight'
 import DashboardMainPanelContent from 'layout/panels/dashboard/DashboardMainPanelContent'
 
-/*--- Routes ---*/
-import RegionSpotlight from 'components/regions/RegionSpotlight'
-
-/*--- Routes ---*/
-
 // Header
 import DashboardHeaderRoutes  from 'routes/dashboard/DashboardHeaderRoutes'
 
@@ -44,7 +39,7 @@ const HeaderStates = {
 
 const FooterExample = ()=>
 <Absolute left right top bottom bg='blue'>
-  yoo
+  Footer Enabled
 </Absolute>
 
 const FooterStates = {
@@ -64,11 +59,9 @@ const AsideStates = {
     <DashboardAsideSmallRoutes/>,
   ],
   normal: [
-    <RegionSpotlight/>,
     <DashboardAsideRoutes/>,
   ],
   large: [
-    <RegionSpotlight/>,
     <DashboardAsideRoutes/>,
   ]
 }

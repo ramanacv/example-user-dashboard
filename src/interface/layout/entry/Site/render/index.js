@@ -8,15 +8,19 @@ import {
  } from 'atomic'
 
  // Components & Layout
+ import RegionTop from 'components/regions/RegionTop'
  import RegionBranding from 'components/regions/RegionBranding'
+ // Zones
 import SiteHeader from 'layout/zones/site/SiteHeader'
 import SiteMain from 'layout/zones/site/SiteMain'
 import SiteFooter from 'layout/zones/site/SiteFooter'
+
 import { Footer }  from 'components/zones'
 
 /* ---------------------------- Module Package ------------------------------ */
 export default props => (
 <Absolute left right top bottom>
+  <RegionTop/>
   <RegionBranding/>
   {/* Header Zone */}
   {!props.zones.header ? null: (

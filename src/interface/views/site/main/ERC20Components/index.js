@@ -2,9 +2,8 @@
 import React from 'react'
 /* ------------------------- Internal Dependencies -------------------------- */
 import {
-  Box, Container, Flex,  Button,
+  Box, Container,
   Heading, Paragraph,
-  BackgroundGradient
 } from 'atomic'
 
 

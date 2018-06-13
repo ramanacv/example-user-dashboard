@@ -18,6 +18,15 @@ import EthereumNameSystem from 'views/site/main/EthereumNameSystem'
 import VerifyTwitterHeader from 'views/site/header/VerifyTwitter'
 import VerifyTwitterMain from 'views/site/main/VerifyTwitter'
 
+
+/* ------------------------- Core Pages -------------------------- */
+/* Mission */
+import MissionHeader from 'views/site/header/core/Mission'
+import MissionMain from 'views/site/main/core/Mission'
+/* About */
+import AboutHeader from 'views/site/header/core/About'
+import AboutMain from 'views/site/main/core/About'
+
 export default [
   {
     path: "/",
@@ -27,30 +36,26 @@ export default [
       exact: true,
     }
   },
+  /* ------------------------- Core -------------------------- */
   {
-    path: "/contracts",
-    header: SmartContractHeader,
-    main: SmartContractMain,
+    path: "/mission",
+    header: MissionHeader,
+    main: MissionMain,
     meta: {
       exact: true,
     }
   },
-
-  /**
-   * Verify
-   */
   {
-    path: "/verify/twitter",
-    header: VerifyTwitterHeader,
-    main: VerifyTwitterMain,
+    path: "/about",
+    header: AboutHeader,
+    main: AboutMain,
     meta: {
       exact: true,
     }
   },
-
-  /**
-   * uPort
-   */
+  /* ------------------------- Solutions -------------------------- */
+  
+  /* uPort */
   {
     path: "/solutions/uport",
     main: UPortSolutionsMain,
@@ -66,9 +71,26 @@ export default [
     }
   },
 
-  /**
-   * Features
-   */
+  /* ------------------------- Verify -------------------------- */
+  {
+    path: "/verify/twitter",
+    header: VerifyTwitterHeader,
+    main: VerifyTwitterMain,
+    meta: {
+      exact: true,
+    }
+  },
+
+  {
+    path: "/contracts",
+    header: SmartContractHeader,
+    main: SmartContractMain,
+    meta: {
+      exact: true,
+    }
+  },
+
+  /* ------------------------- Features -------------------------- */
   {
     path: "/features/erc20",
     main: ERC20Main,

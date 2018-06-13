@@ -7,7 +7,7 @@ import { QRCode } from 'react-qr-svg'
 import {
   Flex, Box, 
   Heading, Image, Paragraph, Link, Span, Button,
-  BackgroundImage, BackgroundGradient
+  BackgroundImage, BackgroundGradient, BackgroundImageIpfs
 } from 'atomic'
 
 import { 
@@ -73,15 +73,23 @@ const ComponentRender = props =>
         <Paragraph f={[2,3]} fw="300" color="charcoal">
           {props.data[item].input.eventDate}
         </Paragraph>
+        <Flex>
+          <Box h={50} >
+            <BackgroundImageIpfs src={idx(props.data[item], _=>_.images.gallery[0].data[0].hash)}/>
+          </Box>
+        </Flex>
       </Box>
-      <Box w={[1,0.5]} >
-        <QRCode
-          level="Q"
-          value={idx(props, _=>_.data[item].data.QR)}
-          bgColor="#FFFFFF"
-          fgColor="#5d3592"
-          style={{ width: "100%" }}
-        />
+      <Box w={[1,0.5]} p={50} >
+        <Box>
+          <BackgroundGradient gradient="purple" z={0} />
+          <QRCode
+            level="Q"
+            value={idx(props, _=>_.data[item].data.QR)}
+            bgColor="transparent"
+            fgColor="#FFF"
+            style={{ display: 'flex', width: "100%", position: 'relative', zIndex: 10 }}
+          />
+        </Box>
       </Box>
   </Flex>
   )}

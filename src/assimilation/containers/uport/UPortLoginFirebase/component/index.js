@@ -1,24 +1,13 @@
 /* ------------------------- External Dependencies -------------------------- */
 import React from 'react';
 import idx from './idx'
-
 import {
-  Flex, Box, 
-  Heading, Image, Paragraph, Link, Span, Button,
-  BackgroundImage, BackgroundGradient
+  Flex, Box, Span, Button,
+  BackgroundImage,
 } from 'atomic'
-import UPortIdentityCard from 'assimilation/components/uport/UPortIdentityCard'
-import UPortIdentityCardAcount from 'assimilation/components/uport/UPortIdentityCardAcount'
-import UPortIdentityBlockchain from 'assimilation/components/uport/UPortIdentityBlockchain'
-import UPortAvatar from 'assimilation/components/uport/UPortAvatar'
-import UPortAvatarMenu from 'assimilation/components/uport/UPortAvatarMenu'
-import UPortIdentityAccount from 'assimilation/components/uport/UPortIdentityAccount'
-import { QRCode } from 'react-qr-svg'
-import DialogOpen from 'containers/dialog/DialogOpen'
 /* ---------------------------- Module Package ------------------------------ */
 export default props => props.user ?
 <Flex {...props} direction={['row']} justify='center' align={['center', null, 'center']} wrap='wrap' textAlign={['center']} w={[1]} >
-  {console.log(props.user)}
   <Box flex={['1 1 0', '2 1 auto']}  >
     <Span>{props.user.displayName}</Span>
   </Box>

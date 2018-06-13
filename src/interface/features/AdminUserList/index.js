@@ -16,7 +16,7 @@ import {
   howlHashDomRequest,
 } from 'store/departments/actions'
 import { fromDatabase } from 'store/departments/selectors'
-
+import UPortCredentialRequest from 'assimilation/containers/uport/UPortCredentialRequest'
 /*---*--- Lifecylce Methods ---*---*/
 const queryLifecycle = lifecycle({
   /*--- Component Mount ---*/
@@ -51,7 +51,7 @@ const ComponentRender = props => <div>
     !props.data ? null :
     Object.keys(props.data).map(item => <Box>
       <Flex align='center' boxShadow={0} bg='grayLight' p={10} w={1} mb={15} >
-        <Flex  w={[1,0.2]} align='center' >
+        <Flex  w={[1,0.4]} align='center' >
         <Box
           borderRadius={9999999}
           bc="white"
@@ -59,10 +59,9 @@ const ComponentRender = props => <div>
           boxShadow={2}
           of="hidden"
           mt={0}
-          ml="auto"
-          mr="auto"
-          h={100}
-          w={100}
+          mr={20}
+          h={60}
+          w={60}
         >
           <BackgroundImage 
             src={idx(props, _=>_.data[item].profile.avatar.uri)}
@@ -74,13 +73,28 @@ const ComponentRender = props => <div>
           </Heading>
           </Link>
         </Flex>
-        <Flex w={[1,0.6]} justify='space-evenly' >
-          <Span>{props.data[item].profile.email}</Span>
-          <Span>{props.data[item].profile.phone}</Span>
+        <Flex w={[1,0.4]} justify='space-evenly' direction='column' >
+          {/* <Span>{props.data[item].profile.email}</Span> */}
+          {/* <Span>{props.data[item].profile.phone}</Span> */}
           <Span>{props.data[item].profile.country}</Span>
         </Flex>
-        <Flex w={[1,0.2]} >
-          <Button>Request Attestation</Button>
+        <Flex w={[1,0.2]} direction="column" >
+          <UPortCredentialRequest
+            requested={[
+              'name', 'email', 'phone'
+            ]}
+            mnid={props.data[item].profile.address} 
+            text="Request Contact"
+          />
+          <Box mt={15} >
+            <UPortCredentialRequest
+              requested={[
+                'verifcationTwitter',
+              ]}
+              mnid={props.data[item].profile.address} 
+              text="Request Twitter"
+            />
+          </Box>
         </Flex>
       </Flex>
     </Box>

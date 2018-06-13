@@ -38,9 +38,9 @@ export default () => (
   <EthereumConnection/>
   <Block z={[500]} >
     <DialogFactory/>
-    <DrawerFactory>
-      <MenuDrawer/>
-    </DrawerFactory>
+      <DrawerFactory>
+        <MenuDrawer/>
+      </DrawerFactory>
     <ToastContainer {...ToastSetting}/>
   </Block>
   <Block z={[300]} o={0.999999} >

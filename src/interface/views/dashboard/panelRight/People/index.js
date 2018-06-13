@@ -5,27 +5,23 @@ import { Switch } from 'react-router-dom';
 import { svg } from 'assets'
 
 import {
-  Flex, Box,
-  Heading, Image, Paragraph, Link, Span, 
-  BackgroundImage, BackgroundGradient,
+  Box,
   Route,
 } from 'atomic'
 /*-* Foundry *-*/
-import AdminUserList from 'features/AdminUserList'
+import MenuPerson from 'components/menus/MenuPerson'
 import PersonTransactions from 'features/people/PersonTransactions'
 /* ------------------------------- Component -------------------------------- */
 export default props =>
-<Box>
-  <Switch>
-    <Route 
-      path={`/dashboard/people/:eid`}
-      component={PersonTransactions}
-      styled={{
-        bg: 'grayLight',
-        color: 'charcoal',
-        p: 15,
-        w: 300
-      }}
-    /> 
-  </Switch>
-</Box>
+<Switch>
+  <Route 
+    path={`/dashboard/people/:eid`}
+    component={MenuPerson}
+    styled={{
+      bg: 'grayLight',
+      color: 'charcoal',
+      p: 15,
+      w: 300
+    }}
+  />
+</Switch>

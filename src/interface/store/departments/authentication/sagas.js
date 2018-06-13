@@ -69,10 +69,10 @@ function* loginWithAuthorization({payload, metadata}) {
 
     if(!authorizationProvider) yield put({type: AUTH_LOGIN_FAILURE, payload: 'Provider Undefined' })
 
-    authorizationProvider.addScope('user');
-    authorizationProvider.addScope('repo');
-    authorizationProvider.addScope('gist');
-    authorizationProvider.addScope('notifications');
+    // authorizationProvider.addScope('user');
+    // authorizationProvider.addScope('repo');
+    // authorizationProvider.addScope('gist');
+    // authorizationProvider.addScope('notifications');
 
     const credentials = yield call(reduxSagaFirebase.auth.signInWithPopup, authorizationProvider);
     const data = yield call(reduxSagaFirebase.auth.signInWithCredential, credentials);

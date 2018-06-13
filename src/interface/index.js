@@ -20,7 +20,7 @@ export default ({ store, history, children }) =>
         <ThemeProvider theme={themeSettings}>
           <MuiThemeProvider>
             <ScrollToTop>
-            <Routes />
+              <Routes />
             </ScrollToTop>
           </MuiThemeProvider>
         </ThemeProvider>

@@ -577,17 +577,20 @@ export function * contractSendTransaction ({payload, metadata}) {
 
 export function * contractDeploy ({payload, metadata}) {
   try {
-    const { network, delta } = metadata
+    const { network } = metadata
     const { bytecode, abi, params } = payload
     const provider = networkRouting(network)
     const wallet = new MetamaskSigner(window.web3, provider);
+
+    // Built for ERC20 Smart Contract
+    // TODO (@kamescg) Generalize for all Ethereum Smart Contracts
     const deployTransaction = ethers.Contract.getDeployTransaction(
       bytecode, abi, // Smart Contract Metadata
       params.amount, params.name, params.decimals, params.symbol // Smart Contract Input Parameters
     );
-    const sendPromise = yield wallet.sendTransaction(deployTransaction);
+    const transaction = yield wallet.sendTransaction(deployTransaction);
     yield put(actions.contractDeploy("SUCCESS")(
-      payload,
+      transaction,
       metadata,
     ))
   } catch (err) {

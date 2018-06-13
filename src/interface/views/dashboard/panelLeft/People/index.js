@@ -11,34 +11,30 @@ import {
   Route,
 } from 'atomic'
 /*-* Foundry *-*/
-import AdminUserList from 'features/AdminUserList'
-import PersonTransactions from 'features/people/PersonTransactions'
 import {PersonSearch} from 'entity'
-import MenuPerson from 'components/menus/MenuPerson'
+import PersonProfileVerifications from 'features/people/PersonProfileVerifications'
 /* ------------------------------- Component -------------------------------- */
 export default props =>
-<Box>
-  <Switch>
-    <Route
-      exact
-      path={`/dashboard/people`}
-      component={PersonSearch}
-      styled={{
-        bg: 'grayLight',
-        color: 'charcoal',
-        p: 15,
-        w: 300
-      }}
-    />
-    <Route 
-      path={`/dashboard/people/:eid`}
-      component={MenuPerson}
-      styled={{
-        bg: 'grayLight',
-        color: 'charcoal',
-        p: 15,
-        w: 300
-      }}
-    /> 
-  </Switch>
-</Box>
+<Switch>
+  <Route
+    path={`/dashboard/people/:eid`}
+    component={PersonProfileVerifications}
+    styled={{
+      bg: 'grayLight',
+      color: 'charcoal',
+      p: 15,
+      w: 300
+    }}
+  /> 
+  <Route
+    exact
+    path={`/dashboard/people`}
+    component={PersonSearch}
+    styled={{
+      bg: 'grayLight',
+      color: 'charcoal',
+      p: 15,
+      w: 300
+    }}
+  />
+</Switch>

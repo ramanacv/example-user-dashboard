@@ -4,20 +4,13 @@ import { connect } from 'react-redux';
 import { compose, lifecycle, withState } from 'recompose'
 import { reduxForm, change } from 'redux-form'
 /* ------------------------- Internal Dependencies -------------------------- */
-import { createValidator, required } from 'logic/forms/validation'
 import Component from './component'
-
+import { fromAuthentication, fromDatabase } from 'store/departments/selectors'
 // Ethers
 import ethers from 'assimilation/store/ethers/actions'
-import EthersContractInformation from 'assimilation/components/ethers/EthersContractInformation'
 import { fromEthers } from 'assimilation/store/selectors'
-
 // uPort
 import { fromUport } from 'assimilation/store/selectors'
-import { uPortSendTransactionRequest } from 'assimilation/store/actions'
-
-// Contract | MeetupEvent
-import {MeetupEvent} from 'contracts'
 /* ---------------------------- Module Package ------------------------------ */
 
 /*-* State Management *-*/
@@ -33,7 +26,7 @@ const QueryLifecycle = lifecycle(
   componentDidMount()
   {
     if(this.props.identityStatus && !this.props.identityLoaded) {
-      this.props.getBalance(this.props.identityData.addressDecoded.address)
+      this.props.getBalance('0x5c8101a4f850e39885ecbf9f627b60b216eebe93')
       this.props.identityLoadToggle(toggle=>!toggle)
     }
   },
@@ -41,7 +34,7 @@ const QueryLifecycle = lifecycle(
   {
 
     if(this.props.identityStatus && !this.props.identityLoaded) {
-      this.props.getBalance(this.props.identityData.addressDecoded.address)
+      this.props.getBalance('0x5c8101a4f850e39885ecbf9f627b60b216eebe93')
       this.props.identityLoadToggle(toggle=>!toggle)
     }
     
@@ -53,6 +46,9 @@ const mapStateToProps = (state, props) => {
   return {
     identityData: fromUport.getDeltaData(state, `credentials`),
     identityStatus: fromUport.getDeltaStatus(state, `credentials`),
+    identity: fromAuthentication.getUser(state),
+    identityDetails: fromDatabase.getDeltaData(state, 'user'),
+    identityDetailsStatus: fromDatabase.getDeltaStatus(state, 'user'),
     accountBalance: fromEthers.getDeltaData(state,  'account|balance'),
     accountBalanceStatus: fromEthers.getDeltaStatus(state,  'account|balance'),
   }

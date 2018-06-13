@@ -37,7 +37,7 @@ const onSubmit = (data, dispatch, props) => new Promise((resolve, reject) => {
       ...data
     },
     meta: {
-      name: 'ERC20',
+      contract: 'ERC20',
       type: 'function',
       status: 'initialized',
       uid: props.uid
@@ -75,10 +75,8 @@ const validate = createValidator({
 const config = {
   form: 'UPortERC20Transfer',
   fields: [
-    'addressStreet',
-    'addressCity',
-    'addressState',
-    'addressCounty',
+    'address',
+    'amount',
   ],
   destroyOnUnmount: true,
   onSubmit,
@@ -90,9 +88,9 @@ const mapStateToProps = (state, props) => ({
     data: fromUport.getDeltaData(state, `credentials`),
     status: fromUport.getDeltaStatus(state, `credentials`),
     uid: fromAuthentication.getUserId(state),
-    attestionSubmit: fromDatabase.getDeltaData(state,'write|attestation|request'),
-    attestionSubmitStatus: fromDatabase.getDeltaData(state,'write|attestation|request'),
-    attestationRequest: fromDatabase.getDeltaData(state,'write|attestation|channel'),
+    attestionSubmit: fromDatabase.getDeltaData(state,'contract|ERC20||request'),
+    attestionSubmitStatus: fromDatabase.getDeltaData(state,'contract|ERC20||request'),
+    attestationRequest: fromDatabase.getDeltaData(state,'contract|ERC20||channel'),
   }
 )
 
@@ -101,9 +99,9 @@ const mapDispatchToProps = (dispatch, props) => ({
     payload: {},
     metadata: {
       branch: [
-        'request', 'attestation', eid
+        'request', 'contract', eid
       ],
-      delta: 'write|attestation|channel',
+      delta: 'contract|ERC20||channel',
     }
   }))
 })

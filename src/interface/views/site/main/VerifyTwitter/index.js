@@ -7,7 +7,6 @@ import {
 } from 'atomic'
 import { UserProfile } from 'containers'
 import UPortAuthVerify from 'assimilation/containers/uport/UPortAuthVerify'
-import VerifyTwitter from 'features/VerifyTwitter'
 /* ------------------------------- Component -------------------------------- */
 export default props =>
 <Box align='center' justify='center'>

@@ -9,12 +9,9 @@ import { reduxForm } from 'redux-form'
 
 /* ------------------------- Internal Dependencies -------------------------- */
 import Form from './form'
-import { createValidator, required } from 'logic/forms/validation'
 
 // Ethers
 import ethers from 'assimilation/store/ethers/actions'
-import EthersContractInformation from 'assimilation/components/ethers/EthersContractInformation'
-import { fromEthers } from 'assimilation/store/selectors'
 
 // uPort
 import { fromUport } from 'assimilation/store/selectors'
@@ -59,10 +56,6 @@ const QueryLifecycle = lifecycle({
 
 
 /* ----------------------------- Form Validation -------------------------------- */
-const validate = createValidator({
-
-})
-
 const config = {
   form: 'FormERC20Deploy',
   fields: [
@@ -70,7 +63,6 @@ const config = {
   ],
   destroyOnUnmount: true,
   onSubmit,
-  validate
 }
 
 /*-* Redux *-*/

@@ -1,6 +1,9 @@
 import React from 'react'
+import {
+  Box, 
+} from 'atomic'
+
 import MenuSmartContracts from 'components/menus/MenuSmartContracts'
-import MenuAsideEthereumWallet from 'components/menus/MenuAsideEthereumWallet'
 
 import Home from 'views/dashboard/main/Home'
 import Settings from 'views/dashboard/main/Settings'
@@ -11,7 +14,6 @@ import AdminUserList from 'views/dashboard/main/UserList'
 
 import MeetupEvent from 'features/MeetupEvent'
 
-
 /**
  * Entity
  */
@@ -19,10 +21,13 @@ import People from 'views/dashboard/main/People'
 import PeoplePanelLeft from 'views/dashboard/panelLeft/People'
 import PeoplePanelRight from 'views/dashboard/panelRight/People'
 
+/* Projects */
+import Projects from 'views/dashboard/main/Project'
+import ProjectAdd from 'views/dashboard/main/ProjectAdd'
+/* Events */
+import EventsList from 'views/events/EventsList'
+import EventAdd from 'views/events/EventAdd'
 
-import {
-  Box, 
-} from 'atomic'
 // Design Specific Layouts | TODO: Handle this better.
 const MenuSmartContractsWrapper = props=>
 <Box w={200} p={15} >
@@ -45,6 +50,29 @@ export default [
       exact: true,
     }
   },
+
+  /* ------------------------- Projects -------------------------- */
+  {
+    path: "/dashboard/projects",
+    main: Projects,
+  },
+  {
+    path: "/dashboard/project/add",
+    main: ProjectAdd
+  },
+
+  /* ------------------------- Events  -------------------------- */
+  {
+    path: "/dashboard/events",
+    main: EventsList,
+    panelRight: EventAdd,
+  },
+  {
+    path: "/dashboard/event/add",
+    main: EventAdd,
+    panelRight: MeetupEventWrapper,
+  },
+  /* ------------------------- Users -------------------------- */
   {
     path: "/dashboard/users",
     main: AdminUserList,
@@ -55,6 +83,7 @@ export default [
     main: EthereumContracts,
     panelLeft: MenuSmartContractsWrapper,
   },
+
   {
     path: "/dashboard/people",
     main: People,

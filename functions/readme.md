@@ -1,6 +1,5 @@
 # Firebase Functions
 
-
 ## Environment Variables
 
 The BuidlBox Cloud Functions utilize environment variables to minimize exposure of private signing keys. Additionally, it prevents developers from having to change project variables in the code.
@@ -14,3 +13,17 @@ firebase functions:config:set uport.appname=APPNAME uport.simplesigner=SIMPLESIG
 ```
 firebase functions:config:set twitter.consumer_key= twitter.consumer_secret= 
 ``` 
+
+### GitHub
+```
+firebase functions:config:set github.consumer_key= github.consumer_secret= 
+``` 
+
+### Onfido
+```
+firebase functions:config:set onfido.consumer_key= onfido.consumer_secret= 
+``` 
+
+
+### Testing
+"uport": "git+https://github.com/uport-project/uport-js.git#fix/contract-tx-request-encoding",

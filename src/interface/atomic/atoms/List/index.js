@@ -7,6 +7,7 @@ import { space, width, fontSize } from 'styled-system'
 const colorRendered = ({ paletteIndex }) => palette(paletteIndex)
 const inlineRendered = ({inline}) => inline ? `li {display:inline-block; &:not(:last-of-type) {margin-right: 10px;}}` : ''
 const textAlignRendered = ({textCenter, textRight}) => textCenter ? 'center' : textRight ? textRight : 'inherit'
+const listStyled = ({listStyle}) => listStyle ? listStyle : 'inherit'
 
 const styles = css`
   color: ${colorRendered};
@@ -14,6 +15,7 @@ const styles = css`
   ${fontSize};
   ${space}
   line-height: 1.7rem;
+  list-style: ${listStyled};
   text-align: ${textAlignRendered};
   ${width}
   ${inlineRendered}
@@ -38,7 +40,6 @@ List.propTypes = {
 }
 
 List.defaultProps = {
-  fontSize: '3.25',
   padding: '10px 0 0 0',
   palette: 'inherit',
   paletteIndex: 0

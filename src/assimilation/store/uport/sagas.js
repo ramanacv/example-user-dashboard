@@ -218,7 +218,6 @@ function* verifyAuthService({payload, metadata}) {
       })
       ,
     }).then(token=> token.json())
-    console.log(verifyResponse)
   } catch(err) {
     console.log(err)
   }
