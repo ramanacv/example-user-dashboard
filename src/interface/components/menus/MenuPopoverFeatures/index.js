@@ -19,7 +19,7 @@ const Body = props => <Box w={[1,1,675]} boxShadow={2} hover={{boxShadow: 3}}  b
       <PerfectScrollbar>
         <Heading level={[3]} f={[3,4]}>What's Being Built</Heading>
         <List>
-          <Link to="/features/erc20" >ERC20</Link>
+          <Link to="/features/tokens" >ERC20</Link>
           <Link to="/features/punch-the-clock">Punch The Clock</Link>
           <Link to="/features/meetup-event">Event Meetup</Link>
           <Link to="/features/ens">Ethereum Name System</Link>

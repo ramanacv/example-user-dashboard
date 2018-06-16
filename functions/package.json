@@ -153,6 +153,7 @@
     "uport": "^0.6.2",
     "uport-connect": "^0.7.3",
     "uport-lite": "^1.0.2",
+    "uport-verify-email": "^1.0.1",
     "url-parse": "^1.2.0",
     "uuid": "^3.2.1"
   }

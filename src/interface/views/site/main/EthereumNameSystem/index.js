@@ -11,7 +11,7 @@ import {
 import UportCredentialsRequest from 'assimilation/containers/uport/UPortCredentialsRequest'
 
 import EnsResolve from 'assimilation/containers/ens/EnsResolve'
-import EnsScan from 'features/EnsScan'
+import EnsScan from 'features/examples/EnsScan'
 
 /* ------------------------------- Component -------------------------------- */
 export default props =>

@@ -25,6 +25,7 @@ import {
 import { fromIpfs } from 'assimilation/store/selectors'
 /* ------------------------ Initialize Dependencies ------------------------- */
 import FormRender from './render'
+console.log(fromIpfs)
 /* --------------------------- Component Entry ------------------------------ */
 /*-- Event Handlers ---*/
 const onSubmit = (data, dispatch, props) => new Promise((resolve, reject) => {

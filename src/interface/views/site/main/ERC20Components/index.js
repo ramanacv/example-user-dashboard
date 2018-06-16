@@ -9,10 +9,10 @@ import {
 
 import UportCredentialsRequest from 'assimilation/containers/uport/UPortCredentialsRequest'
 
-import ERC20Transfer from 'features/ERC20/ERC20Transfer'
-import ERC20TransferFrom from 'features/ERC20/ERC20TransferFrom'
-import ERC20Approve from 'features/ERC20/ERC20Approve'
-import ERC20Deploy from 'features/ERC20/ERC20Deploy'
+import ERC20Transfer from 'features/tokens/ERC20Transfer'
+import ERC20TransferFrom from 'features/tokens/ERC20TransferFrom'
+import ERC20Approve from 'features/tokens/ERC20Approve'
+import ERC20Deploy from 'features/tokens/ERC20Deploy'
 
 /* ------------------------------- Component -------------------------------- */
 export default props =>

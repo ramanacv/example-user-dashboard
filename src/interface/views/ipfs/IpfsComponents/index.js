@@ -2,16 +2,21 @@
 import React from 'react'
 /* ------------------------- Internal Dependencies -------------------------- */
 import {
-  Flex, Box, 
-  Heading, Image, Paragraph, Link, Span, 
-  BackgroundImage, BackgroundGradient
+  Box, Container,
+  Heading,
 } from 'atomic'
-import MeetupEvent from 'features/examples/MeetupEvent'
+// Features 
+import IpfsJSONUpload from 'features/ipfs/IpfsJSONUpload'
 /* ------------------------------- Component -------------------------------- */
 export default props =>
-<Box p={25} >
-  <MeetupEvent
-    contractAddress="0x311a70681f008d51f01e75032ee766718c9d74ba"
-    contractName="MeetupEvent"
-  />
+<Box>
+  <Container w={[1220]} >
+    <Heading f={[3]}>
+      The IPFS Components
+    </Heading>
+
+  <Box bg='grayLight' br={15} p={15} >
+    <IpfsJSONUpload/>
+  </Box>  
+  </Container>
 </Box>

@@ -10,7 +10,7 @@ import {
 
 import UportCredentialsRequest from 'assimilation/containers/uport/UPortCredentialsRequest'
 
-import PunchTheClock from 'features/PunchTheClock'
+import PunchTheClock from 'features/examples/PunchTheClock'
 
 /* ------------------------------- Component -------------------------------- */
 export default props =>

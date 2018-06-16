@@ -13,7 +13,7 @@ export default props =>
 <Section bg="white" py={[50,150]} >
   <BackgroundImage src={codingOutside}/>
   <Container w={[980]} >
-    <Flex>
+    <Flex justify='center' align='center'>
       <Box w={[1,1,0.5]} px={30} >
         <Heading f={[3,4]}>
           Smart Contract Interactions

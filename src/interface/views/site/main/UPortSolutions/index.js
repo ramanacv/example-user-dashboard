@@ -14,7 +14,7 @@ import UPortCredentialsAuthRequest from 'assimilation/containers/uport/UPortCred
 import IdentityBalance from 'features/IdentityBalance'
 import IdentityToken from 'features/IdentityToken'
 import IdentityLogin from 'features/IdentityLogin'
-import UPortAttestFirebase from 'features/UportAttestFirebase'
+import UPortAttestFirebase from 'features/uport/UportAttestFirebase'
 
 import AuthorizationLogin from 'containers/authentication/AuthorizationLogin'
 

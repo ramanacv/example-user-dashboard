@@ -1,21 +1,50 @@
-import { put, takeEvery, call } from 'redux-saga/effects';
+/* ------------------------- External Dependencies -------------------------- */
+import { put, takeEvery, } from 'redux-saga/effects';
 import IPFS from 'ipfs-api'
-import actions from './actions'
 import { imgSrcToBlob, blobToArrayBuffer } from 'blob-util'
-// Constants
+/* ------------------------- Internal Dependencies -------------------------- */
+import actions from './actions'
+/*--- Constants ---*/
 var Buffer = require('buffer/').Buffer
 const ipfs = new IPFS('ipfs.infura.io', '5001', {protocol: 'https' })
+
+/* ------------------------- Sagas List -------------------------- */
+/**
+ * File Add
+ * @desc Upload files to IPFS servers
+ * @param {object} payload
+ * @param {object} metadata
+ */
 export function * filesAdd ({payload, metadata}) {
   try {
-const file = yield window.fetch(payload.preview)
-const blob = yield imgSrcToBlob(file.url)
-const arrayBuffer = yield blobToArrayBuffer(blob)
-const buffer = Buffer.from(arrayBuffer)
-const data = yield ipfs.add(buffer)
-    yield put(actions.filesAdd("SUCCESS")(
-      data,
-      metadata,
-    ))
+    switch (metadata.type) {
+      case 'image':
+        const buffer = ImageConvertToBuffer(payload.preview)
+        const data = yield ipfs.add(buffer)
+        yield put(actions.filesAdd("SUCCESS")(data,metadata))
+        break;
+      case 'json':
+          /**
+           * Assume the default type is an object. 
+           * Developers can define inputType in MetaData.
+           * TODO (@kamescg) Automate type checking.
+           */
+          if(metadata.inputType === 'string') payload = JSON.parse(payload)
+          if(metadata.inputType === 'file') payload = FileConverToJSON(payload)
+          const bufferJSON = Buffer.from(JSON.stringify(payload))
+          const dataJSONHash = yield ipfs.add(bufferJSON)
+          yield put(actions.filesAdd("SUCCESS")(dataJSONHash,metadata))
+        break;
+      case 'video':
+
+        break;
+      case 'pdf':
+        break;
+      default:
+        break;
+    }
+
+    
   } catch (err) {
     console.log(err)
     yield put(actions.filesAdd("FAILURE")(
@@ -27,7 +56,36 @@ const data = yield ipfs.add(buffer)
   }
 }
 
+// File Upload Utility Functions
+/**
+ * ImageConvertToBuffer
+ * @desc Convert a fetched image file to an ArrayBuffer
+ * @param {*} fileLocation 
+ */
+const ImageConvertToBuffer = async (fileLocation) => {
+  const file = await window.fetch(fileLocation)
+  const blob = await imgSrcToBlob(file.url)
+  const arrayBuffer = await blobToArrayBuffer(blob)
+  return Buffer.from(arrayBuffer)
+}
+
+/**
+ * FileConvertToJSON
+ * @desc Convert a fetched image file to an ArrayBuffer
+ * @param {*} file
+ */
+const FileConverToJSON = async (file) => {
+
+  return file
+}
+
  
+/**
+ * File Add
+ * @desc Upload files to IPFS servers
+ * @param {object} payload
+ * @param {object} metadata
+ */
 export function * filesGet ({payload, metadata}) {
   try {
 

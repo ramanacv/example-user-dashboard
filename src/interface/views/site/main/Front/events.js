@@ -8,7 +8,7 @@ import {
 } from 'atomic'
 // Features 
 import UPortAttestEvent from 'features/uport/UPortAttestEvent'
-import EventsList from 'features/Events/EventsList'
+import EventsList from 'features/events/EventsList'
 /* ------------------------------- Component -------------------------------- */
 export default props =>
 <Section gradient="purple" py={[50,150]} >

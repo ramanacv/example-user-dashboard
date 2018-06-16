@@ -27,6 +27,9 @@ import MissionMain from 'views/site/main/core/Mission'
 import AboutHeader from 'views/site/header/core/About'
 import AboutMain from 'views/site/main/core/About'
 
+/* IPFS */
+import IpfsComponents from 'views/ipfs/IpfsComponents'
+
 export default [
   {
     path: "/",
@@ -70,6 +73,13 @@ export default [
       exact: true,
     }
   },
+  {
+    path: "/solutions/ipfs",
+    main: IpfsComponents,
+    meta: {
+      exact: true,
+    }
+  },
 
   /* ------------------------- Verify -------------------------- */
   {
@@ -92,7 +102,7 @@ export default [
 
   /* ------------------------- Features -------------------------- */
   {
-    path: "/features/erc20",
+    path: "/features/tokens",
     main: ERC20Main,
     meta: {
       exact: true,

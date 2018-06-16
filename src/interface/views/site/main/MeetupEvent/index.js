@@ -6,7 +6,7 @@ import {
   Heading, Paragraph,
   BackgroundGradient
 } from 'atomic'
-import MeetupEvent from 'features/MeetupEvent'
+import MeetupEvent from 'features/examples/MeetupEvent'
 import UportCredentialsRequest from 'assimilation/containers/uport/UPortCredentialsRequest'
 /* ------------------------------- Component -------------------------------- */
 export default props =>

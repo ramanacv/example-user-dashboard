@@ -9,7 +9,9 @@ const JWT = require('did-jwt')
 const admin = require('firebase-admin')
 const functions = require('firebase-functions')
 const cors = require('cors')({origin: true})
+const EmailVerifier =  require('uport-verify-email')
 /* ------------------------- Internal Dependencies -------------------------- */
+const utilities = require('./utilities')
 const database = require('./database')
 const validateFirebaseIdToken = require('./authorization')
 const TwitterClient = require('./twitter')
@@ -23,7 +25,7 @@ const ERC20 = require('./contracts/ERC20.js')
 const app = express()
 app.use(cors)
 app.use(cookieParser)
-app.use(validateFirebaseIdToken)
+app.use(validateFirebaseIdToken) // Authenticate User is registered. TODO (@kamescg) Add roles/permissions to authentication service
 
 /* uPort */
 const Credentials = uport.Credentials
@@ -31,20 +33,12 @@ const SimpleSigner = uport.SimpleSigner
 // const Contract = uport.Contract
 const ContractFactory = uport.ContractFactory
 
-const buildRequestURI = (txObject, {callbackUrl, type} = {}) => {
-  if (!mnid.isMNID(txObject.to)) throw new Error('To address must be MNID')
-  const uri = `https://id.uport.me/${txObject.to}`
-
-  const pairs = []
-  if (txObject.value)    pairs.push(['value', parseInt(txObject.value, 16)])
-  if (txObject.function) pairs.push(['function', txObject.function])
-  if (callbackUrl)       pairs.push(['callback_url', callbackUrl])
-  if (txObject.gasPrice) pairs.push(['gasPrice', txObject.gasPrice])
-  if (type)              pairs.push(['type',type])
-
-  return `${uri}?${pairs.map(kv => `${kv[0]}=${encodeURIComponent(kv[1])}`).join('&')}`
-}
-
+/**
+ * Temporary Fix
+ * @desc @ZachFerland provided this temporary fix for smart contract transaction signing requests.
+ * TODO (@kamescg) When the libraries are updated get rid of this temporary fix.
+ */
+const { buildRequestURI } = utilities
 const Contract = ContractFactory(buildRequestURI)
 
 
@@ -64,6 +58,12 @@ const databaseURL = configuration.firebase.databaseURL
 const uportAppName = configuration.uport.appname
 const uportAppAddress = configuration.uport.address
 const uportSimpleSignerKey = configuration.uport.simplesigner
+
+// uPort Email Verification
+const gmailUsername = configuration.gmail.username
+const gmailPassword = configuration.gmail.password
+
+
 
 // Github
 // const githubPublicKey = configuration.github.public_key
@@ -92,24 +92,150 @@ admin.initializeApp({
 
 /* ------------------------ Firebase Cloud Functions ------------------------ */
 /**
- * VerifyGithub
+ * Long-term the BuidlBox Cloud Functions should be converted into modules
+ * but for the time being, while the cloud functions are are still under active
+ * development the functionality will live here.
+ * 
+ * If you have any questions about the BuidlBox infrastructure please join the
+ * uPort Community Channel at chat.uport.me and we'll be happy to answer any
+ * questions and help you buidl distributed applications.
+ */
+
+/* ------------------------ Authorized Express Server ----------------------- */
+/**
+ * Verify | /api/verify
+ * @desc Authenticates a uPort decentralized identity
  * @param {object} request The HTTP request object
  * @param {object} response The HTTP response object
- * TODO(@kamescg) The current authentiction doesn't work. Need to figure out why
  */
-// const verifyGithub = (req, res) => {
-//   res.json({user: req.user}).send()
-//   octokit.authenticate({
-//     type: 'oauth',
-//     key: githubPublicKey,
-//     secret: githubSecretKey
-//   })
 
-//   octokit.users.checkFollowing({username: 'KamesCG'}).then(result => {
-//     console.log(result)
-//   })
-// }
+app.post('/verify', (request, response) => {
+  const provider = request.user.firebase.sign_in_provider
+  switch (provider) {
+    case 'twitter.com':
+    verifyTwitter(request, response)
+      break
+    case 'github.com':
+    // verifyGithub(req, res)
+      break
+    case 'google.com':
+    // verifyGoogle(req, res)
+      break
+    case 'facebook.com':
+    // verifyFacebook(req, res)
+      break
+    default:
+    break
+  }
+})
 
+/**
+ * Onfido | /api/onfido
+ * @desc The API endpoint for KYC identity verification systems.
+ * @param {object} request The HTTP request object
+ * @param {object} response The HTTP response object
+ */
+app.post('/onfido', (request, response) => {
+
+})
+
+/**
+ * Verify Email | /api/verify/email
+ * @desc Verify a decentralized identity email address
+ * @param {object} request The HTTP request object
+ * @param {object} response The HTTP response object
+ */
+app.post('/verify/email', (request, response) => {
+  const verifier = new EmailVerifier({
+    credentials: uportCredentials, // uPort Credentials
+    callbackUrl: `https://us-central1-${projectId}.cloudfunctions.net/api/email/callback`, // Email verification callback.
+    user: gmailUsername, // Environment Variable
+    pass: gmailPassword, // Environment Variable
+    service: 'gmail',
+    confirmationSubject: 'uPort Identity ',
+    confirmationTemplate: qr => `<html>...${qr}...</html>`,
+    attestationSubject: 'uPort Email Attestation',
+    attestationTemplate: qr => `<html>...${qr}...</html>`,
+    customRequestParams: {},
+  })
+})
+
+/**
+ * Verify Email Callback | /api/verify/email/callback
+ * @desc The callback URL for uPort email verification
+ * @param {object} request The HTTP request object
+ * @param {object} response The HTTP response object
+ */
+app.post('/verify/email/callback', (request, response) => {
+
+})
+
+/**
+ * Express API Endpoint
+ * @desc Express API endpoint
+ */
+exports.api = functions.https.onRequest(app)
+
+/* --------------------------- Database Requests ---------------------------- */
+/**
+ * Manage Attestation Requests
+ * TODO(@kamescg): "Official" Attestation Verification database naming structure.
+ * Currently the '/request/attestation/' path is monitored for database changes.
+ * This is just a starting point and MVP for data streaming between frontend/backend
+ * The process needs to be more thoroughly thought about to fully understand how we
+ * can enable as many verifiatons systems to "hook" into our private verification attestation
+ * framework/boilerplate.
+ */
+
+exports.request = functions.database.ref('/request/{type}/{request}')
+  .onCreate(event => {
+    const eventKey = event.data.key
+    const eventData = event.data.val()
+    if (eventData.meta.status) {
+      switch (eventData.meta.status) {
+        case ('initialized'):
+          switch (eventData.meta.type) {
+            case ('login'):
+              return loginGenerate(eventData, eventKey)
+            case ('attestation'):
+              return attestationGenerate(eventData, eventKey)
+            case ('function'):
+              return functionGenerate(eventData, eventKey)
+            case ('credential'):
+              return credentialRequest(eventData, eventKey)
+            default:
+              // TODO(@kamescg): Handle default use case
+              break
+          }
+          break
+        default:
+          // TODO(@kamescg): Handle default use case
+          break
+      }
+    }
+  })
+
+/**
+ * Event Request
+ * @desc Monitor database for new Event attestation requests 
+ * @param {object} event Firebase Database Event object.
+ */
+exports.eventRequest = functions.database.ref('/events/{event}')
+.onCreate(event => {
+  const eventKey = event.data.key
+  const eventData = event.data.val()
+  if (eventData.meta.status) {
+    switch (eventData.meta.status) {
+      case ('initialized'):
+        return eventGenerate(eventData, eventKey)
+      default:
+        // TODO(@kamescg): Handle default use case
+        break
+    }
+  }
+})
+
+/* ------------------------ Core uPort Functionality ------------------------ */
 /**
  * Identity
  * @desc Authenticates a uPort decentralized identity
@@ -118,13 +244,6 @@ admin.initializeApp({
  */
 exports.identity = functions.https.onRequest((request, response) => {
   cors(request, response, () => {
-    // Verify JWT
-    // verifyJWT(request.body.JWT, {
-    //   audience: uportAppAddress
-    // }).then(verifiedJWT => {
-    //   console.log(verifiedJWT)
-    // })
-
     uportCredentials.receive(request.body.JWT)
     .then(profile => {
       /**
@@ -214,35 +333,6 @@ exports.identityCallback = functions.https.onRequest((request, response) => {
 })
 
 /**
- * Identity
- * @desc Authenticates a uPort decentralized identity
- * @param {object} request The HTTP request object
- * @param {object} response The HTTP response object
- */
-
-app.post('/verify', (request, response) => {
-  // console.log(request)
-  const provider = request.user.firebase.sign_in_provider
-  switch (provider) {
-    case 'twitter.com':
-      verifyTwitter(request, response)
-      break
-    case 'github.com':
-      // verifyGithub(req, res)
-      break
-    default:
-      break
-  }
-})
-
-exports.api = functions.https.onRequest(app)
-exports.verify = functions.https.onRequest((request, response) => {
-  cors(request, response, () => {
-    console.log(request)
-  })
-})
-
-/**
  * VerifyTwitter
  * @param {object} req
  * @param {object} res
@@ -306,60 +396,6 @@ const verifyTwitter = (req, res) => {
   })
   res.json({user: req.user}).send()
 }
-
-/* --------------------------- Database Requests ---------------------------- */
-/**
- * Manage Attestation Requests
- * TODO(@kamescg): Better Attestation Verification database naming structure.
- * Currently the '/request/attestation/' path is monitored for database changes.
- * This is just a starting point and MVP for data streaming between frontend/backend
- * The process needs to be more thoroughly thought about to fully understand how we
- * can enable as many verifiatons systems to "hook" into our private verification attestation
- * framework/boilerplate.
- */
-
-exports.request = functions.database.ref('/request/{type}/{request}')
-  .onCreate(event => {
-    const eventKey = event.data.key
-    const eventData = event.data.val()
-    if (eventData.meta.status) {
-      switch (eventData.meta.status) {
-        case ('initialized'):
-          switch (eventData.meta.type) {
-            case ('login'):
-              return loginGenerate(eventData, eventKey)
-            case ('attestation'):
-              return attestationGenerate(eventData, eventKey)
-            case ('function'):
-              return functionGenerate(eventData, eventKey)
-            case ('credential'):
-              return credentialRequest(eventData, eventKey)
-            default:
-              // TODO(@kamescg): Handle default use case
-              break
-          }
-          break
-        default:
-          // TODO(@kamescg): Handle default use case
-          break
-      }
-    }
-  })
-
-exports.eventRequest = functions.database.ref('/events/{event}')
-.onCreate(event => {
-  const eventKey = event.data.key
-  const eventData = event.data.val()
-  if (eventData.meta.status) {
-    switch (eventData.meta.status) {
-      case ('initialized'):
-        return eventGenerate(eventData, eventKey)
-      default:
-        // TODO(@kamescg): Handle default use case
-        break
-    }
-  }
-})
 
 /**
  * Credential Request
@@ -530,6 +566,28 @@ const eventGenerate = (eventData, eventKey) => {
     })
   })
 }
+
+/**
+ * VerifyGithub
+ * @param {object} request The HTTP request object
+ * @param {object} response The HTTP response object
+ * TODO(@kamescg) The current authentiction doesn't work. Need to figure out why
+ */
+// const verifyGithub = (req, res) => {
+//   res.json({user: req.user}).send()
+//   octokit.authenticate({
+//     type: 'oauth',
+//     key: githubPublicKey,
+//     secret: githubSecretKey
+//   })
+
+//   octokit.users.checkFollowing({username: 'KamesCG'}).then(result => {
+//     console.log(result)
+//   })
+// }
+
+
+
 
 /* ----------------------------- Utility Functions ----------------------------- */
 const uportPush = (account, url, eventKey ) => {

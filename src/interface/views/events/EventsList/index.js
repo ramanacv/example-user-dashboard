@@ -6,6 +6,6 @@ import {
   Heading, Image, Paragraph, Link, Span, SVG, BackgroundImage
 } from 'atomic'
 // Features 
-import EventsList from 'features/Events/EventsList'
+import EventsList from 'features/events/EventsList'
 /* ------------------------------- Component -------------------------------- */
 export default props => <EventsList/>

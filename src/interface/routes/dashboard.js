@@ -12,7 +12,7 @@ import EnsScan from 'views/dashboard/main/EnsScan'
 import AdminUserList from 'views/dashboard/main/UserList'
 
 
-import MeetupEvent from 'features/MeetupEvent'
+import MeetupEvent from 'features/examples/MeetupEvent'
 
 /**
  * Entity
