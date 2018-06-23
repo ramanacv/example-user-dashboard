@@ -28,6 +28,11 @@ $ npm install -g truffle
 5. Setup custom authentication server (Firebase => Project Settings => Service accounts ) and save private keys in newly created `secrets` folder in the `src/functions` and name the file `service_accounts.json` - this information gets include in cloud function deploy for custom auth server.
 5. Compile Firebase Cloud Functions and deploy `yarn build ; firebase deploy --only functions`
 
+#### Example of configuring environment variables
+```
+firebase functions:config:set uport.appname=APPNAME uport.simplesigner=SIMPLESIGNER uport.address=ADDRESS
+```
+
 ### Merging Web 2.0 and Web 3.0
 The BuidlBox is designed to merge Web 2.0 and Web 3.0 capabilities.
 
@@ -75,7 +80,6 @@ After a new Firebase project has been initialized it's time to copy/paste the pr
 The default BuidlBox settings are located in `/src/settings/Firebase/index.js` which should be replaced with the newly minted configuration parameters
 ![Add Firebase Settings to BuidlBox](documentation/assets/images/setup/setup-firebase-settings-buidlbox.png)
 
-The Firebase Authentication server by default communicates with `localhost` and default project url e.x. `buidlbox-demo.firebaseapp.com` but when it's time to run the project in a production environment the default settings should be changed to reflect specific project requirements.
 
 ### Custom Authentication Server
 uPort allows users (self-sovereign identities) to authenticate themselves with Web 2.0 applications using the Ethereum Blockchain. However,to take advantage of these capabilities a custom authentication server is required. Fortunately, the BuidlBox contains an `identity` Cloud Function, which includes Firebase and uPort Authentication services, so developers can quickly setup an authentication service, so uPort Identities can login to a web application.

@@ -6,15 +6,12 @@ import { site as siteRoutes } from 'routes'
 import { 
   Route, Absolute
  } from 'atomic'
-
  // Components & Layout
- import RegionTop from 'components/regions/RegionTop'
  import RegionBranding from 'components/regions/RegionBranding'
  // Zones
 import SiteHeader from 'layout/zones/site/SiteHeader'
 import SiteMain from 'layout/zones/site/SiteMain'
 import SiteFooter from 'layout/zones/site/SiteFooter'
-
 import { Footer }  from 'components/zones'
 
 /* ---------------------------- Module Package ------------------------------ */

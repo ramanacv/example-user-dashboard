@@ -13,7 +13,6 @@ import {
 } from 'store/departments/actions'
 import { fromDatabase } from 'store/departments/selectors'
 
-import VerifyIdentity from 'features/verify/VerifyIdentity'
 /*---*--- Lifecylce Methods ---*---*/
 const queryLifecycle = lifecycle({
   /*--- Component Mount ---*/
@@ -68,7 +67,6 @@ const ComponentRender = props => !props.data ? null :
       Network: {props.data.profile.addressDecoded.network}
     </Heading>
   </Flex>
-  <VerifyIdentity/>
 </Box>
 
 

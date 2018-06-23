@@ -99,37 +99,37 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      /*--- Interface ---*/
-      components: path.resolve(__dirname, '../src/interface/components'),
-      containers: path.resolve(__dirname, '../src/interface/containers'),
-      interface: path.resolve(__dirname, '../src/interface/interface'),
-      entity: path.resolve(__dirname, '../src/interface/entity'),
-      features: path.resolve(__dirname, '../src/interface/features'),
-      forms: path.resolve(__dirname, '../src/interface/forms'),
-      layout: path.resolve(__dirname, '../src/interface/layout'),
-      routes: path.resolve(__dirname, '../src/interface/routes'),
-      store: path.resolve(__dirname, '../src/interface/store'),
-      theme: path.resolve(__dirname, '../src/interface/theme'),
-      views: path.resolve(__dirname, '../src/interface/views'),
-      
-      /*--- Components ---*/
-      atomic: path.resolve(__dirname, '../src/interface/atomic'),
-      particles: path.resolve(__dirname, '../src/interface/atomic/particles'),
-      atoms: path.resolve(__dirname, '../src/interface/atomic/atoms'),
-      molecules: path.resolve(__dirname, '../src/interface/atomic/molecules'),
-      organisms: path.resolve(__dirname, '../src/interface/atomic/organisms'),
-      quarks: path.resolve(__dirname, '../src/interface/atomic/quarks'),
-      
-      /*--- Core ---*/
-      assembly: path.resolve(__dirname, '../src/assembly'),
-      assets: path.resolve(__dirname, '../src/assets'),
-      assimilation: path.resolve(__dirname, '../src/assimilation'),
-      contracts: path.resolve(__dirname, '../src/contracts'),
-      foundry: path.resolve(__dirname, '../src/foundry'),
-      logic: path.resolve(__dirname, '../src/logic'),
-      services: path.resolve(__dirname, '../src/services'),
-      settings: path.resolve(__dirname, '../src/settings'),
-      static: path.resolve(__dirname, '../src/static')
+        /*--- Interface ---*/
+        components: path.resolve(__dirname, '../src/interface/components'),
+        containers: path.resolve(__dirname, '../src/interface/containers'),
+        interface: path.resolve(__dirname, '../src/interface/interface'),
+        entity: path.resolve(__dirname, '../src/interface/entity'),
+        features: path.resolve(__dirname, '../src/interface/features'),
+        foundry: path.resolve(__dirname, '../src/interface/foundry'),
+        forms: path.resolve(__dirname, '../src/interface/forms'),
+        layout: path.resolve(__dirname, '../src/interface/layout'),
+        routes: path.resolve(__dirname, '../src/interface/routes'),
+        store: path.resolve(__dirname, '../src/interface/store'),
+        theme: path.resolve(__dirname, '../src/interface/theme'),
+        views: path.resolve(__dirname, '../src/interface/views'),
+        
+        /*--- Components ---*/
+        atomic: path.resolve(__dirname, '../src/interface/atomic'),
+        particles: path.resolve(__dirname, '../src/interface/atomic/particles'),
+        atoms: path.resolve(__dirname, '../src/interface/atomic/atoms'),
+        molecules: path.resolve(__dirname, '../src/interface/atomic/molecules'),
+        organisms: path.resolve(__dirname, '../src/interface/atomic/organisms'),
+        quarks: path.resolve(__dirname, '../src/interface/atomic/quarks'),
+        
+        /*--- Core ---*/
+        assembly: path.resolve(__dirname, '../src/assembly'),
+        assets: path.resolve(__dirname, '../src/assets'),
+        assimilation: path.resolve(__dirname, '../src/assimilation'),
+        contracts: path.resolve(__dirname, '../src/contracts'),
+        logic: path.resolve(__dirname, '../src/logic'),
+        services: path.resolve(__dirname, '../src/services'),
+        settings: path.resolve(__dirname, '../src/settings'),
+        static: path.resolve(__dirname, '../src/static')
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
