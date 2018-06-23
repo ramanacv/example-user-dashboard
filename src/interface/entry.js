@@ -34,6 +34,7 @@ const ToastSetting = {
 }
 
 export default () => (
+
 <div>
   <EthereumConnection/>
   <Block z={[500]} >

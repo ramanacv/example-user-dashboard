@@ -23,7 +23,3 @@ firebase functions:config:set github.consumer_key= github.consumer_secret=
 ```
 firebase functions:config:set onfido.consumer_key= onfido.consumer_secret= 
 ``` 
-
-
-### Testing
-"uport": "git+https://github.com/uport-project/uport-js.git#fix/contract-tx-request-encoding",

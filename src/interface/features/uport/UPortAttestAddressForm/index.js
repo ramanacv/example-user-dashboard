@@ -8,21 +8,18 @@ import { connect } from 'react-redux'
 import { reduxForm } from 'redux-form'
 
 /* ------------------------- Internal Dependencies -------------------------- */
-import { createValidator, required } from 'logic/forms/validation'
+import { createValidator } from 'logic/forms/validation'
 /*--- Redux Store ---*/
 import { fromAuthentication } from 'store/departments/selectors'
 import { fromDatabase } from 'store/departments/selectors'
 import { fromUport } from 'assimilation/store/selectors'
-import { uPortGetAttestCredentialsRequest } from 'assimilation/store/actions'
 import Form from './form'
 
 // Database
 import { 
   databaseWriteRequest,
-  databaseReadRequest,
   databaseChannelRequest,
 } from 'store/departments/actions'
-import {Connect} from 'uport-connect'
 /* --------------------------- Component Entry ------------------------------ */
 /*-- Event Handlers ---*/
 const onSubmit = (data, dispatch, props) => new Promise((resolve, reject) => {
@@ -34,7 +31,9 @@ const onSubmit = (data, dispatch, props) => new Promise((resolve, reject) => {
 
   dispatch(databaseWriteRequest({
   payload: {
-    data,
+    data: {
+      addressVerification: data // NOTICE: The `addressVerification` is used to request the verification
+    },
     meta: {
       name: 'address',
       type: 'attestation',

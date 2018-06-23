@@ -11,7 +11,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 /* ------------------------- Internal Dependencies -------------------------- */
 import themeSettings from 'theme/settings'
 import { ScrollToTop } from 'atomic'
-import Routes from './routes/entry';
+import Routes from './entry.js';
 /* ---------------------------- Initialization ------------------------------ */
 injectTapEventPlugin();
 export default ({ store, history, children }) =>

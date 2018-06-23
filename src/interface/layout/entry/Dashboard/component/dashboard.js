@@ -69,8 +69,7 @@ const AsideStates = {
 /* ---------------------------- Module Package ------------------------------ */
 export default  ({
     regions, zones,
-    aside, footer, header, main,
-    ...props
+    aside, footer, header, main
 }) => 
 <Absolute left right top bottom of='hidden' >
   {/* Header : Zone */}

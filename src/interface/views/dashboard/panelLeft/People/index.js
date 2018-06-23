@@ -25,16 +25,5 @@ export default props =>
       p: 15,
       w: 300
     }}
-  /> 
-  <Route
-    exact
-    path={`/dashboard/people`}
-    component={PersonSearch}
-    styled={{
-      bg: 'grayLight',
-      color: 'charcoal',
-      p: 15,
-      w: 300
-    }}
   />
 </Switch>

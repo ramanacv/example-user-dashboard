@@ -1,100 +1,14 @@
-# BuidlBox - Beta
+# User Dashboard w/ Attestation Request Example
 
 The BuidlBox is a boilerplate for rapidly prototyping creating Web 2.0 and Web 3.0 applications.
 
 The boilerplate includes includes ready-to-go components and integrations with popular decentralized solutions (uPort, IPFS, ethers.js, Web3, ShapeShift, 0x), so developers can quickly launch new decentralized applications, without worrying about the details.
 
-⚠️ WARNING ⚠️ The Boilerplate is still in Beta - requires additional documentation and cleanup.
-
-# Documentation
-The BuidlBox integrates with uPort, MetaMask, Truffle, Infura and other distributed applications services, libraries and protocols. A full collection of tutorials, guides and videos will be made available for quickly launching a new production ready distributed application.
-
-## Frontend
-- Web 2.0 and Web 3.0 Building Blocks | Coming Soon
-- React, Redux, Sagas and Blockchain - Taming State Management | Comming Soon
-- Writing to the Ethereum Blockchain - Transction Signing Requests | Coming Soon
-- Reading from the Ethereum Blockchain - A Universal Database | Coming Soon
-
-## uPort - Decentralized Identity Platform
-
-Visit the chat.uport.me channel for Community Support
-
-#### Education Material
-- What is A Decentralized Identity | Coming Soon
-- How The Web of Trust Works | Coming Soon
-- Cryptographic Primitives for the Modern Age | Coming Soon
-- A Sybil Resistant Ethereum Ecosystem | Coming Soon
-- The World's Biggest Key Signing Party - Web of Trust | Coming Soon
-
-#### Tutorials
-- [Register A Distributed Application](https://developer.uport.me/uport-js/guides/server-side-credentials-example#register-an-app)
-- Configuring uPort/Firebase Integration | Coming Soon
-- Managing DApp Private Keys in Environment Variables | Coming Soon
-- Creating A Login Request | Coming Soon 
-- Requesting Credentials & Private Information | Coming Soon 
-- Verify Signatures in The Web of Trust | Coming Soon 
-- The Web 3.0 Authentication Lifecycle  | Coming Soon
-- []()
-
-#### Related Libraries & Protocols
-- [specifications](https://github.com/uport-project/specs) - uPort Protocol Overview
-- [IdentityManager/Proxy Smart Contracts](https://github.com/uport-project/uport-identity) - Segregated Accounts
-- [did-jwt](https://github.com/uport-project/did-jwt) - uPort and DID compliant JWT
-- [ethr-did](https://github.com/uport-project/ethr-did) - Ethereum Decentralized Identity
-- [ethr-did-registry](https://github.com/uport-project/ethr-did-registry) - Decentralized Identity Registry
-- [ethr-did-resolver](https://github.com/uport-project/ethr-did-resolver) - Decentralized Identity Resolver
-- [muport-core-js](https://github.com/uport-project/muport-core-js)
-- [muport-did-resolver](https://github.com/uport-project/muport-did-resolver)
-- [uport-js](https://github.com/uport-project/uport-js) - Backend Library (uPort 1.0)
-- [uport-connect](https://github.com/uport-project/uport-connect) -  Frontend Library (uPort 1.0)
-- [uport-core-js](https://github.com/uport-project/uport-core-js) - Modular uPort Library (uPort 2.0) 
-- [uport-js-client](https://github.com/uport-project/uport-js-client) - Debugging/Testing Library
-- [uport-lite](https://github.com/uport-project/uport-lite) -  Registry Lookup
-- [lamba-pututu](https://github.com/uport-project/lambda-pututu) - Push Notification Service
-- [lambda-olorun](https://github.com/uport-project/lambda-olorun) - Private Network Support
-- [lambda-caleuche](https://github.com/uport-project/lambda-caleuche) - Event Hub Service
-- [lambda-fatima](https://github.com/uport-project/lambda-fatima) - Event Badge CLI
-- [lambda-unnu](https://github.com/uport-project/lambda-unnu) - Creator of Identities
-- [lambda-sensui](https://github.com/uport-project/lambda-sensui) - Transaction Funding Service
-
-uPort Applications & SDKs
-- [IOS Application](https://itunes.apple.com/us/app/uport-id/id1123434510?mt=8)
-- [Android Application](https://play.google.com/store/apps/details?id=com.uportMobile&hl=en_US)
-- IOS SDK - Coming Soon
-- [Android SDK](https://github.com/uport-project/uport-android-sdk) Alpha (API Feedback)
-
-#### Resources
-- [AppManager](http://appmanager.uport.me/)
-- [Code Bounties](https://gitcoin.co/explorer)
-- [Tutorial/Guide Bounties](https://kauri.io)
-- [uPort React Truffle Box](http://truffleframework.com/boxes/react-uport)
-
-#### Community Bounties
-- [Drag-and-Drop Credential Builder](https://github.com/uport-project/buidlbox/issues/21)
-- [Drizzle Frontend Library Integration](https://github.com/uport-project/buidlbox/issues/30)
-- [Decentralized Public Profile]()
-- [Event Registration & Token Staking]()
-- [Sybil Resistant Token Curation Registry](https://github.com/uport-project/buidlbox/issues/14)
-- [Social Platform for Shamir Secret Sharing](https://github.com/uport-project/buidlbox/issues/22)
-- [uPort Event Management System]()
-- [uPort Encrypted Userspaces]()
-- [uPort Smart Contract Deployment Factory](https://github.com/uport-project/buidlbox/issues/19)
-- [uPort Location Based Game]()
-- [uPort Onfida Integration]()
-
-## BuidlBox Overview
-Core building block include decentralized login using uPort, smart contract compilling/deployment/testing with Truffle and communication with the blockchain via Infura. 
-
-The BuidlBox boilerplate also provides core building blocks like Redux, Routing, State Management, Atomic Components and Firebase.
-
-TL;DR: Rapid protoping of decentralized applications using mesh solutions.
-
-![BuidlBox Preview](documentation/assets/images/buidl-preview.png)
 ### Install
 
 ```
 -------- Step 1 --------
-git clone git@github.com:uport-project/buidlbox.git ; cd buidlbox
+git clone git@github.com:uport-project/example-user-dashboard.git ; cd example-user-dashboard
 
 -------- Step 2 --------
 npm install || yarn
@@ -302,6 +216,7 @@ As a developer starting to experiment with decentralized solutions, like the Eth
 ```
 firebase functions:config:set uport.appname=APPNAME uport.simplesigner=SIMPLESIGNER uport.address=ADDRESS
 ```
+
 
 To limit exposure of the private keys (hardcoding) BuidlBox uses environment variables to minimize the exposure of sensitive information. Additionally, environment variables are used to minimize code changes when neccesary, like for example setting the application name, which doesn't require the same dudiligence as private key management, but is simply more convient.
 

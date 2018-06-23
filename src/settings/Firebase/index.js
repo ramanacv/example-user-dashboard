@@ -1,11 +1,11 @@
 module.exports = {
     FIREBASE_CONFIG: {
-        apiKey: "AIzaSyAiEO5yyiA-iG8AJo7o_0OcS8za71EuJHM",
-        authDomain: "buidlbox-dev.firebaseapp.com",
-        databaseURL: "https://buidlbox-dev.firebaseio.com",
-        projectId: "buidlbox-dev",
-        storageBucket: "buidlbox-dev.appspot.com",
-        messagingSenderId: "521083971753"
+        apiKey: "AIzaSyDjj392u9tTfk-0A_7FPZdmf940pflLcy0",
+        authDomain: "buidlbox-lite.firebaseapp.com",
+        databaseURL: "https://buidlbox-lite.firebaseio.com",
+        projectId: "buidlbox-lite",
+        storageBucket: "buidlbox-lite.appspot.com",
+        messagingSenderId: "427530799422"
     },
 };
     

@@ -17,19 +17,19 @@ const IdentityCore = props =>
   <Box w={[1,1,0, 0.55]} ta='left' px={[20,40]} >
     <SVG svg={branduPort} w={60} />
     <Heading f={[4,5]} color='purple' >
-      Identity At The core
+      Register A Distributed Application
     </Heading>
     <Heading f={[2,3]} color='charcoal' >
-      Build truly distributed applications with a decentralized database.
+      Launch a new distributed application using the uPort AppManager
     </Heading>
     <Paragraph color='charcoal' f={[1]} mb={40} >
-    Morbi sodales magna id nisl fermentum viverra. Ut quam eros, rhoncus ac risus vel, tempus congue lorem. Maecenas euismod tincidunt ipsum, nec varius quam viverra sit amet. Sed sit amet lobortis sapien, vel bibendum justo. Suspendisse venenatis gravida nisi eget tincidunt. Proin eleifend justo sed libero molestie lacinia.
+      To privately sign and request credentials and attestations requires generating a public/private key-pair and registering the public key in an Ethereum Claims Registry. Using Firebase Cloud Functions we can easily deploy the required functionality.
     </Paragraph>
-    <Link to='solutions/uport' >
+    <a href='https://appmanager.uport.me/' target="_blank" >
       <Button>
-          Learn More
+          Register Decentralized Application
       </Button>
-    </Link>
+    </a>
   </Box>
 
   <Box w={[1,1,0.45]} py={[20,40]}>
@@ -41,18 +41,18 @@ const IdentityCore = props =>
 </Flex>
 
 const IdentityServer = props =>
-<Flex align='center'>
-  
+<Flex align='center' mt={30} >
+
   <Box w={[1,1,0, 0.55]} ta='left' px={[20,40]}  order={[1,1, 2]} >
     <SVG svg={brandFirebase} w={60} />
     <Heading f={[4,5]} color='purple' >
-      Firebase Integration
+      Firebase Cloud Functions
     </Heading>
     <Heading f={[2,3]} color='charcoal' >
-      Launch a new private server to manage uPort Signing Keys in minutes
+      Deploy Private Keys in A Cloud Environment
     </Heading>
     <Paragraph color='charcoal' f={[1]} mb={40} >
-    Morbi sodales magna id nisl fermentum viverra. Ut quam eros, rhoncus ac risus vel, tempus congue lorem. Maecenas euismod tincidunt ipsum, nec varius quam viverra sit amet. Sed sit amet lobortis sapien, vel bibendum justo. Suspendisse venenatis gravida nisi eget tincidunt. Proin eleifend justo sed libero molestie lacinia.
+      Starting managing decentralized identity login using ready-to-go Firebase Cloud Functions. Be sure the reference the README for details on how to upload private keys in the runtime environment.   
     </Paragraph>
     <Link to='solutions/uport' >
       <Button>
@@ -69,34 +69,6 @@ const IdentityServer = props =>
 
 </Flex>
 
-const IdentityComponents = props =>
-<Flex align='center'>
-  
-  <Box w={[1,1,0, 0.55]} ta='left' px={[20,40]} >
-    <SVG svg={brandMetaMask} w={60} />
-    <Heading f={[4,5]} color='purple' >
-      Buidling Blocks
-    </Heading>
-    <Heading f={[2,3]} color='charcoal' >
-      Start experimenting with Web3 technology quickly and easily.
-    </Heading>
-    <Paragraph color='charcoal' f={[1]} mb={40} >
-    Morbi sodales magna id nisl fermentum viverra. Ut quam eros, rhoncus ac risus vel, tempus congue lorem. Maecenas euismod tincidunt ipsum, nec varius quam viverra sit amet. Sed sit amet lobortis sapien, vel bibendum justo. Suspendisse venenatis gravida nisi eget tincidunt. Proin eleifend justo sed libero molestie lacinia.
-    </Paragraph>
-    <Link to='solutions/uport' >
-      <Button>
-          Learn More
-      </Button>
-    </Link>
-  </Box>
-
-  <Box w={[1,1,0.45]} py={[20,40]}>
-    <BrowserDisplay>
-      <Image src={MetaMaskContract} w={1} />
-    </BrowserDisplay>
-  </Box>
-
-</Flex>
 
 
 export default props =>
@@ -104,6 +76,5 @@ export default props =>
   <Container w={[1220]} >
     <IdentityCore/>
     <IdentityServer/>
-    <IdentityComponents/>
   </Container>
 </Section>

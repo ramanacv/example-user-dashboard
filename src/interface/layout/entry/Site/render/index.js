@@ -20,7 +20,6 @@ import { Footer }  from 'components/zones'
 /* ---------------------------- Module Package ------------------------------ */
 export default props => (
 <Absolute left right top bottom>
-  <RegionTop/>
   <RegionBranding/>
   {/* Header Zone */}
   {!props.zones.header ? null: (

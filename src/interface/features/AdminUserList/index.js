@@ -1,8 +1,7 @@
 /* ------------------------- External Dependencies -------------------------- */
-import _ from 'lodash'
 import idx from './idx'
 import React from 'react';
-import { compose, lifecycle, withProps, withState, withHandlers, renderComponent } from 'recompose'
+import { compose, lifecycle } from 'recompose'
 import { connect } from 'react-redux'
 import {
   Flex, Box,
@@ -11,9 +10,7 @@ import {
 } from 'atomic'
 
 import { 
-  databaseWriteRequest,
   databaseReadRequest,
-  howlHashDomRequest,
 } from 'store/departments/actions'
 import { fromDatabase } from 'store/departments/selectors'
 import UPortCredentialRequest from 'assimilation/containers/uport/UPortCredentialRequest'
@@ -74,8 +71,6 @@ const ComponentRender = props => <div>
           </Link>
         </Flex>
         <Flex w={[1,0.4]} justify='space-evenly' direction='column' >
-          {/* <Span>{props.data[item].profile.email}</Span> */}
-          {/* <Span>{props.data[item].profile.phone}</Span> */}
           <Span>{props.data[item].profile.country}</Span>
         </Flex>
         <Flex w={[1,0.2]} direction="column" >
@@ -89,10 +84,10 @@ const ComponentRender = props => <div>
           <Box mt={15} >
             <UPortCredentialRequest
               requested={[
-                'verifcationTwitter',
+                'addressVerification',
               ]}
               mnid={props.data[item].profile.address} 
-              text="Request Twitter"
+              text="Request Address"
             />
           </Box>
         </Flex>

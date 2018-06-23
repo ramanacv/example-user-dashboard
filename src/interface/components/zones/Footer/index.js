@@ -26,60 +26,12 @@ export default props =>
         </Heading>
         <Paragraph f={[2]}>Open Source The World</Paragraph>
         <Paragraph f={[0]}>
-          Vestibulum vel arcu auctor, venenatis odio vel, varius dui. Praesent suscipit consectetur imperdiet. Mauris accumsan sed enim in ultricies. Sed aliquet nulla et justo finibus, nec rhoncus nulla condimentum. Integer ultrices pellentesque est, id tempus quam ornare nec.
+        uPort returns ownership of identity to the individual. uPort's open identity system allows users to register their own identity on Ethereum, send and request credentials, sign transactions, and securely manage keys & data. 
         </Paragraph>
         <Paragraph f={[0]}>
           © 2018 uPort/ConsenSys
         </Paragraph>
       </Box>
-      <Flex w={[1,1,0.65]} justify='space-between' pl={[0,0, 100]}>
-
-        {/* 
-          Documentation Menu
-        */}
-        <Flex w={[1,1,0.3]} direction='column' >
-          <Heading f={[3]} fw="300" >
-            Documentation
-          </Heading>
-          <HorizontalRule w={1} />
-          <List p={0} listStyle='none' >
-            <Link>Launch The BuidlBox</Link>
-            <Link>The Basic Structure</Link>
-            <Link>Merging Web 2.0 and Web 3.0</Link>
-            <Link>Managing Private Keys</Link>
-          </List>
-        </Flex>
-        {/* 
-          Documentation Menu
-        */}
-        <Flex w={[1,1,0.3]} direction='column' >
-          <Heading f={[3]} fw="300" >
-            Community
-          </Heading>
-          <HorizontalRule w={1} />
-          <List p={0} listStyle='none' >
-            <Link>GitHub</Link>
-            <Link>Twitter</Link>
-            <Link>Medium</Link>
-            <Link>Riot</Link>
-          </List>
-        </Flex>
-        {/* 
-          Documentation Menu
-        */}
-        <Flex w={[1,1,0.3]} direction='column' >
-          <Heading f={[3]} fw="300" >
-            Organization
-          </Heading>
-          <HorizontalRule w={1} />
-          <List p={0} listStyle='none' >
-            <Link>Verify Identity</Link>
-            <Link>Social Profile</Link>
-            <Link>Add Project</Link>
-          </List>
-        </Flex>
-
-      </Flex>
     </Flex>
   </Container>
 </Section>

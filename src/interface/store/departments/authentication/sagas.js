@@ -145,20 +145,6 @@ function* syncUserSaga() {
     const { error, user } = yield take(channel);
     if (user) {
       yield put(authSyncUser(user));
-      yield put(firestoreDocumentFilterGetRequest({
-      payload: {},
-      metadata: {
-        branch: [
-          'people'
-        ],
-        delta: 'AuthenticatedProfile',
-        filters: {
-          where: [
-            ['eid', '==', user.uid]
-          ]
-        }
-      }
-    }))
     }
     else yield put(authSyncUser(null));
   }

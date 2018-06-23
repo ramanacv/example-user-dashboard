@@ -11,7 +11,6 @@ import {
   databaseReadRequest,
 } from 'store/departments/actions'
 import { fromDatabase } from 'store/departments/selectors'
-import IdentityToken from 'features/IdentityToken'
 
 /*---*--- Lifecylce Methods ---*---*/
 const queryLifecycle = lifecycle({
@@ -48,9 +47,7 @@ const ComponentRender = props => !props.data ? null :
     Token Balances
   </Heading>
   <Flex>
-    <IdentityToken address='0x9660fab3ca763f2fa6cf85a19ffc423cc53c0523' contract="BCK" />
-    <IdentityToken address='0x9660fab3ca763f2fa6cf85a19ffc423cc53c0523' contract="DNA" />
-    <IdentityToken address='0x9660fab3ca763f2fa6cf85a19ffc423cc53c0523' contract="PAK" />
+
   </Flex>
 </Box>
 
